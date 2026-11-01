@@ -1,11 +1,27 @@
 import os
+import sqlite3
 from flask import Flask, render_template_string, request, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = "super_secret_free_survey_key"
 
-# সাময়িক ডাটাবেজ
-users_db = {}
+# ডাটাবেজ ইনিশিয়ালাইজেশন ফাংশন
+def init_db():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            balance REAL DEFAULT 0.00
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# অ্যাপ চালু হওয়ার আগেই ডাটাবেজ তৈরি করে নেওয়া
+init_db()
 
 # সাধারণ এবং সুন্দর ডিজাইন স্টাইল (CSS)
 BASE_TEMPLATE = '''
@@ -71,12 +87,17 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        if email in users_db:
-            error = "Email already exists! Please try another one."
-        else:
-            users_db[email] = {'password': password, 'balance': 0.00}
+        
+        try:
+            conn = sqlite3.connect('database.db')
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO users (email, password, balance) VALUES (?, ?, ?)", (email, password, 0.00))
+            conn.commit()
+            conn.close()
             return redirect(url_for('login'))
-            
+        except sqlite3.IntegrityError:
+            error = "Email already exists! Please try another one."
+
     content = f'''
         <h3>Create Your TaskPayBD Account</h3>
         {f'<div class="alert">{error}</div>' if error else ''}
@@ -97,8 +118,14 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        user = users_db.get(email)
-        if user and user['password'] == password:
+        
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row and row[0] == password:
             session['user'] = email
             return redirect(url_for('dashboard'))
         else:
@@ -123,12 +150,19 @@ def dashboard():
     if 'user' not in session:
         return redirect(url_for('login'))
     user_email = session['user']
-    user_data = users_db.get(user_email)
+    
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT balance FROM users WHERE email = ?", (user_email,))
+    row = cursor.fetchone()
+    conn.close()
+    
+    balance = row[0] if row else 0.00
     
     content = f'''
         <h2>User Dashboard</h2>
         <p><strong>Welcome,</strong> {user_email}</p>
-        <p><strong>Current Balance:</strong> ${user_data['balance']:.2f} USD</p>
+        <p><strong>Current Balance:</strong> ${balance:.2f} USD</p>
         <hr>
         <h3>Available Surveys & Offers</h3>
         <p><em>CPX Research & BitLabs offerwalls will be integrated here soon.</em></p>
