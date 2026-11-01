@@ -5,7 +5,7 @@ from flask import Flask, render_template_string, request, redirect, url_for, ses
 app = Flask(__name__)
 app.secret_key = "super_secret_free_survey_key"
 
-# ডাটাবেজ ইনিশিয়ালাইজেশন ফাংশন
+# Database initialization
 def init_db():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -20,49 +20,88 @@ def init_db():
     conn.commit()
     conn.close()
 
-# অ্যাপ চালু হওয়ার আগেই ডাটাবেজ তৈরি করে নেওয়া
 init_db()
 
-# সাধারণ এবং সুন্দর ডিজাইন স্টাইল (CSS)
+# Professional SurveyLama Style Template
 BASE_TEMPLATE = '''
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskPayBD - Global Survey & Earn</title>
+    <title>TaskPayBD -Ghore Bose Survey Kore Income</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; }
-        header { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 24px; }
-        header nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
-        header nav a:hover { text-decoration: underline; }
-        .container { max-width: 600px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
-        h2, h3 { color: #333; }
-        input[type="email"], input[type="password"] { width: 100%; padding: 10px; margin: 10px 0 20px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
-        button:hover { background: #219653; }
-        .alert { color: #e74c3c; margin-bottom: 15px; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        body { background-color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+        .navbar { background: #ffffff; border-bottom: 1px solid #eaeaea; padding: 15px 0; }
+        .brand-logo { font-weight: 800; font-size: 24px; color: #2c3e50; text-decoration: none; }
+        .btn-custom-red { background-color: #ff6b6b; color: white; font-weight: 600; border-radius: 20px; padding: 8px 25px; }
+        .btn-custom-red:hover { background-color: #fa5252; color: white; }
+        .hero-title { font-size: 38px; font-weight: 800; color: #2b3a4a; line-height: 1.3; }
+        .hero-desc { font-size: 16px; color: #555; margin-top: 15px; line-height: 1.6; }
+        .login-card { background: #ffffff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .form-control { border-radius: 20px; padding: 12px 20px; background-color: #f8f9fa; border: 1px solid #ced4da; }
+        .footer-section { background-color: #4db6ac; color: white; padding: 40px 0 20px 0; margin-top: 80px; }
+        .footer-section a { color: white; text-decoration: none; }
+        .footer-section a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>TaskPayBD</h1>
-        <nav>
-            <a href="/">Home</a>
-            {% if 'user' in session %}
-                <a href="/dashboard">Dashboard</a>
-                <a href="/logout">Logout</a>
-            {% else %}
-                <a href="/login">Login</a>
-                <a href="/signup">Sign Up</a>
-            {% endif %}
-        </nav>
-    </header>
-    <div class="container">
+
+    <!-- Header / Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="brand-logo" href="/">TaskPayBD</a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="/" class="text-dark text-decoration-name me-4 fw-semibold d-none d-md-inline">Swagotom</a>
+                <a href="/" class="text-dark text-decoration-name me-4 fw-semibold d-none d-md-inline">Kibhabe kaj kore</a>
+                <a href="/signup" class="btn btn-custom-red me-2">Nibondhon</a>
+                <a href="/login" class="btn btn-outline-dark rounded-pill px-4">Log in</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
         {{ content | safe }}
     </div>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">TASKPAYBD</h5>
+                    <p class="small">Online survey. Ponnokh o poriseba unnoto korte survey-te anshon nin ebong apnar motamot shear korun.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h6 class="fw-bold">Amader Somporke</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#">Kibhabe eta kaj kore</a></li>
+                        <li><a href="#">Sahajjo</a></li>
+                        <li><a href="#">Prashnoi jiggeshito proshnaboli</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h6 class="fw-bold">Site-er Bhasha</h6>
+                    <select class="form-select form-select-sm w-50 bg-light text-dark">
+                        <option selected>Bangla - BENGALI</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="border-light">
+            <div class="text-center small pb-3">
+                <a href="#" class="me-3">Sodosshopod sortaboli</a> | 
+                <a href="#" class="mx-3">Aini notish</a> | 
+                <a href="#" class="mx-3">Goponiyota niti</a> | 
+                <a href="#" class="mx-3">Purashkar system</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 '''
@@ -73,11 +112,42 @@ def home():
         return redirect(url_for('dashboard'))
     
     content = '''
-        <h2>Welcome to TaskPayBD</h2>
-        <p>Complete global surveys and online tasks to earn real cash rewards!</p>
-        <hr>
-        <p><a href="/signup"><button style="background:#2980b9;">Create Account / Sign Up</button></a></p>
-        <p><a href="/login"><button style="background:#8e44ad;">Login to Dashboard</button></a></p>
+        <div class="row align-items-center">
+            <!-- Left Side Text Banner -->
+            <div class="col-lg-7 mb-5 mb-lg-0 pe-lg-5">
+                <h1 class="hero-title">Ghore bose proti survey-te 600 tk porjonto ay korun!</h1>
+                <p class="hero-desc">Paid online survey-te anshon korun ebong proti mase 20000 tk porjonto ay korun!</p>
+                <div class="mt-4">
+                    <h5 class="fw-bold text-dark">Kibhabe?</h5>
+                    <p class="text-muted small">Protiti somponno survey-er jonno, apni payment paben ja apni nagode rupantor korte parben.</p>
+                </div>
+                <div class="mt-3">
+                    <h5 class="fw-bold text-dark">Aro o beshi taka ay korte chan?</h5>
+                    <p class="text-muted small">Bonus pete dine 3-ti survey-er uttor din! Proti mase chomok, challenge, protijogita ebong aro onek kichu bhule na giye.</p>
+                </div>
+            </div>
+
+            <!-- Right Side Login Box (SurveyLama Style) -->
+            <div class="col-lg-5">
+                <div class="login-card">
+                    <h3 class="fw-bold mb-2">Ekhoni log in korun</h3>
+                    <p class="text-muted small mb-4">Ami aro purushkar pete log in kori.</p>
+                    <form method="POST" action="/login">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="email" required placeholder="Apnar email din">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="password" required placeholder="Password din">
+                        </div>
+                        <div class="mb-3 text-end">
+                            <a href="#" class="small text-decoration-none text-muted">Apnar password bhule gechen?</a>
+                        </div>
+                        <button type="submit" class="btn btn-custom-red w-100 py-2">Log in korun</button>
+                    </form>
+                    <p class="text-center mt-3 small text-muted">Account nei? <a href="/signup" class="fw-bold text-danger">Nibondhon korun</a></p>
+                </div>
+            </div>
+        </div>
     '''
     return render_template_string(BASE_TEMPLATE, content=content)
 
@@ -87,7 +157,6 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        
         try:
             conn = sqlite3.connect('database.db')
             cursor = conn.cursor()
@@ -96,19 +165,27 @@ def signup():
             conn.close()
             return redirect(url_for('login'))
         except sqlite3.IntegrityError:
-            error = "Email already exists! Please try another one."
+            error = "Ei email-ti already registered!"
 
     content = f'''
-        <h3>Create Your TaskPayBD Account</h3>
-        {f'<div class="alert">{error}</div>' if error else ''}
-        <form method="POST">
-            <label>Email Address:</label>
-            <input type="email" name="email" required>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-            <button type="submit">Sign Up</button>
-        </form>
-        <p>Already have an account? <a href="/login">Login here</a></p>
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="login-card">
+                    <h3 class="fw-bold mb-3 text-center">TaskPayBD Nibondhon</h3>
+                    {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
+                    <form method="POST">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="email" required placeholder="Email address">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="password" required placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-custom-red w-100 py-2">Account Khulun</button>
+                    </form>
+                    <p class="text-center mt-3 small">Already account ache? <a href="/login" class="text-danger">Log in korun</a></p>
+                </div>
+            </div>
+        </div>
     '''
     return render_template_string(BASE_TEMPLATE, content=content)
 
@@ -129,19 +206,27 @@ def login():
             session['user'] = email
             return redirect(url_for('dashboard'))
         else:
-            error = "Invalid Email or Password! Please try again."
-            
+            error = "Bhul email ba password!"
+
     content = f'''
-        <h3>Login to TaskPayBD</h3>
-        {f'<div class="alert">{error}</div>' if error else ''}
-        <form method="POST">
-            <label>Email Address:</label>
-            <input type="email" name="email" required>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="/signup">Sign Up here</a></p>
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="login-card">
+                    <h3 class="fw-bold mb-3 text-center">Log in</h3>
+                    {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
+                    <form method="POST">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="email" required placeholder="Email address">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="password" required placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-custom-red w-100 py-2">Log in korun</button>
+                    </form>
+                    <p class="text-center mt-3 small">Account nei? <a href="/signup" class="text-danger">Nibondhon korun</a></p>
+                </div>
+            </div>
+        </div>
     '''
     return render_template_string(BASE_TEMPLATE, content=content)
 
@@ -160,12 +245,28 @@ def dashboard():
     balance = row[0] if row else 0.00
     
     content = f'''
-        <h2>User Dashboard</h2>
-        <p><strong>Welcome,</strong> {user_email}</p>
-        <p><strong>Current Balance:</strong> ${balance:.2f} USD</p>
-        <hr>
-        <h3>Available Surveys & Offers</h3>
-        <p><em>CPX Research & BitLabs offerwalls will be integrated here soon.</em></p>
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="login-card bg-light">
+                    <h4>Dashboard</h4>
+                    <p class="text-muted mb-0">Swagotom, <strong>{user_email}</strong></p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="login-card text-center bg-white border-primary">
+                    <h6 class="text-muted">Total Balance</h6>
+                    <h2 class="fw-bold text-success">${balance:.2f} USD</h2>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="login-card">
+                    <h5 class="fw-bold">Available Surveys (Offerwall)</h5>
+                    <hr>
+                    <p class="text-muted small">Ekhane CPX Research ebong BitLabs-er survey offerwalls load hobe.</p>
+                    <button class="btn btn-custom-red btn-sm" disabled>Survey Load Hoche...</button>
+                </div>
+            </div>
+        </div>
     '''
     return render_template_string(BASE_TEMPLATE, content=content)
 
