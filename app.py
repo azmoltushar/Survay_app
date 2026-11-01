@@ -21,6 +21,18 @@ def init_db():
 
 init_db()
 
+# Helper function to mask email (e.g., arefinhossain345@gmail.com -> ar#############5@gmail.com)
+def mask_email(email):
+    try:
+        name, domain = email.split('@')
+        if len(name) <= 3:
+            masked = name[0] + '***'
+        else:
+            masked = name[:2] + '#' * (len(name) - 3) + name[-1]
+        return f"{masked}@{domain}"
+    except:
+        return email
+
 BASE_TEMPLATE = '''
 <!DOCTYPE html>
 <html lang="bn">
@@ -36,10 +48,8 @@ BASE_TEMPLATE = '''
         .btn-green { background-color: #16a34a; color: white; font-weight: 600; border-radius: 6px; padding: 8px 20px; text-decoration: none; }
         .btn-green:hover { background-color: #15803d; color: white; }
         .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 500px; margin: 40px auto; }
-        .form-control { background-color: #030712; border: 1px solid #374151; color: white; padding: 12px; }
+        .form-control { background-color: #030712; border: 1px solid #374151; color: white; padding: 12px; border-radius: 8px; }
         .form-control:focus { background-color: #030712; color: white; border-color: #22c55e; box-shadow: none; }
-        
-        /* Custom styling for cards to make text bright white */
         .feature-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 25px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color: #ffffff; }
         .step-box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; margin-top: 15px; color: #ffffff; }
         .hero-section { background: linear-gradient(180deg, #14532d 0%, #070d1b 100%); padding: 60px 20px; text-align: center; border-bottom: 2px solid #1c2541; }
@@ -189,18 +199,41 @@ def signup():
     content = f'''
         <div class="container my-5">
             <div class="main-card">
-                <h3 class="fw-bold mb-3 text-center text-success">TaskPayBD রেজিস্ট্রেশন</h3>
+                <h3 class="fw-bold mb-3 text-center text-success">আপনার অ্যাকাউন্ট তৈরি করুন!</h3>
+                <p class="text-muted text-center small mb-4">নিবন্ধন সম্পূর্ণ বিনামূল্যে।</p>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
-                        <label class="form-label small">Email address</label>
-                        <input type="email" class="form-control" name="email" required placeholder="name@example.com">
+                        <input type="email" class="form-control" name="email" required placeholder="ই-মেইল">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small">Password</label>
-                        <input type="password" class="form-control" name="password" required placeholder="••••••••">
+                        <input type="password" class="form-control" name="password" required placeholder="পাসওয়ার্ড">
                     </div>
-                    <button type="submit" class="btn btn-green w-100 py-2">অ্যাকাউন্ট খুলুন</button>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="confirm_password" required placeholder="আপনার পাসওয়ার্ড নিশ্চিত করুন">
+                    </div>
+                    
+                    <div class="mb-3 small text-muted bg-dark p-3 rounded border border-secondary">
+                        <p class="fw-bold mb-1 text-white">পাসওয়ার্ড ফরম্যাট:</p>
+                        <ul class="mb-0 ps-3">
+                            <li>এতে ৬ থেকে ২০টি অক্ষর থাকতে হবে।</li>
+                            <li>এতে কমপক্ষে একটি বড় অক্ষর থাকতে হবে।</li>
+                            <li>এতে কমপক্ষে একটি ছোট হাতের অক্ষর থাকতে হবে।</li>
+                            <li>এতে ০ থেকে ৯ এর মধ্যে একটি সংখ্যা থাকতে হবে।</li>
+                            <li>পাসওয়ার্ড এবং এর নিশ্চিতকরণ একই হতে হবে।</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms1" required>
+                        <label class="form-check-label small text-muted" for="terms1">হ্যাঁ, আমি আপডেট, পরিষেবা এবং অফার সম্পর্কে যোগাযোগ পেতে সম্মত।</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms2" required>
+                        <label class="form-check-label small text-muted" for="terms2">হ্যাঁ, আমি পড়েছি এবং বুঝতে পেরেছি গোপনীয়তা নীতি, সদস্যপদ শর্তাবলী, পুরস্কার সিস্টেমের নিয়ম ও শর্তাবলী।</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-green w-100 py-2">চালিয়ে যান</button>
                 </form>
                 <p class="text-center mt-3 small text-muted">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="/login" class="text-success fw-bold">লগ ইন করুন</a></p>
             </div>
@@ -234,16 +267,60 @@ def login():
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
-                        <label class="form-label small">Email address</label>
                         <input type="email" class="form-control" name="email" required placeholder="name@example.com">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small">Password</label>
                         <input type="password" class="form-control" name="password" required placeholder="••••••••">
+                    </div>
+                    <div class="mb-3 text-end">
+                        <a href="/forgot-password" class="small text-success text-decoration-none">পাসওয়ার্ড ভুলে গেছেন?</a>
                     </div>
                     <button type="submit" class="btn btn-green w-100 py-2">লগ ইন</button>
                 </form>
                 <p class="text-center mt-3 small text-muted">অ্যাকাউন্ট নেই? <a href="/signup" class="text-success fw-bold">রেজিস্ট্রেশন করুন</a></p>
+            </div>
+        </div>
+    '''
+    return render_template_string(BASE_TEMPLATE, content=content)
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    message = ""
+    error = ""
+    masked_email_str = ""
+    
+    if request.method == 'POST':
+        email = request.form['email']
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
+        row = cursor.fetchone()
+        
+        if row:
+            masked_email_str = mask_email(email)
+            message = f"আপনার একাউন্ট খুঁজে পাওয়া গেছে! ইমেইল ফরম্যাট: {masked_email_str}"
+        else:
+            error = "এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট রেজিস্টার্ড নেই!"
+        conn.close()
+
+    content = f'''
+        <div class="container my-5">
+            <div class="main-card">
+                <h3 class="fw-bold mb-3 text-center text-success">পাসওয়ার্ড রিকভারি</h3>
+                {f'<div class="alert alert-success py-2 small">{message}</div>' if message else ''}
+                {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">আপনার রেজিস্টার্ড ইমেইল দিন</label>
+                        <input type="email" class="form-control" name="email" required placeholder="name@example.com">
+                    </div>
+                    <button type="submit" class="btn btn-green w-100 py-2">ইমেইল যাচাই করুন</button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <a href="/login" class="small text-success text-decoration-none">লগ ইন পেজে ফিরে যান</a>
+                </div>
             </div>
         </div>
     '''
