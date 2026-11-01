@@ -7,35 +7,93 @@ app.secret_key = "super_secret_free_survey_key"
 # সাময়িক ডাটাবেজ
 users_db = {}
 
+# সাধারণ এবং সুন্দর ডিজাইন স্টাইল (CSS)
+BASE_TEMPLATE = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskPayBD - Global Survey & Earn</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; }
+        header { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { margin: 0; font-size: 24px; }
+        header nav a { color: white; text-decoration: none; margin-left: 15px; font-weight: bold; }
+        header nav a:hover { text-decoration: underline; }
+        .container { max-width: 600px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
+        h2, h3 { color: #333; }
+        input[type="email"], input[type="password"] { width: 100%; padding: 10px; margin: 10px 0 20px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
+        button:hover { background: #219653; }
+        .alert { color: #e74c3c; margin-bottom: 15px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TaskPayBD</h1>
+        <nav>
+            <a href="/">Home</a>
+            {% if 'user' in session %}
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div class="container">
+        {{ content | safe }}
+    </div>
+</body>
+</html>
+'''
+
 @app.route('/')
 def home():
     if 'user' in session:
         return redirect(url_for('dashboard'))
-    return '''
-        <h2>Welcome to Global Survey Platform</h2>
-        <a href="/signup">Sign Up</a> | <a href="/login">Login</a>
+    
+    content = '''
+        <h2>Welcome to TaskPayBD</h2>
+        <p>Complete global surveys and online tasks to earn real cash rewards!</p>
+        <hr>
+        <p><a href="/signup"><button style="background:#2980b9;">Create Account / Sign Up</button></a></p>
+        <p><a href="/login"><button style="background:#8e44ad;">Login to Dashboard</button></a></p>
     '''
+    return render_template_string(BASE_TEMPLATE, content=content)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    error = ""
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         if email in users_db:
-            return "Email already exists! <a href='/signup'>Try again</a>"
-        users_db[email] = {'password': password, 'balance': 0.00}
-        return "Registration Successful! <a href='/login'>Click here to Login</a>"
-    return '''
-        <h3>Sign Up</h3>
+            error = "Email already exists! Please try another one."
+        else:
+            users_db[email] = {'password': password, 'balance': 0.00}
+            return redirect(url_for('login'))
+            
+    content = f'''
+        <h3>Create Your TaskPayBD Account</h3>
+        {f'<div class="alert">{error}</div>' if error else ''}
         <form method="POST">
-            Email: <input type="email" name="email" required><br><br>
-            Password: <input type="password" name="password" required><br><br>
-            <button type="submit">Register</button>
+            <label>Email Address:</label>
+            <input type="email" name="email" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <button type="submit">Sign Up</button>
         </form>
+        <p>Already have an account? <a href="/login">Login here</a></p>
     '''
+    return render_template_string(BASE_TEMPLATE, content=content)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = ""
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -44,15 +102,21 @@ def login():
             session['user'] = email
             return redirect(url_for('dashboard'))
         else:
-            return "Invalid Credentials! <a href='/login'>Try again</a>"
-    return '''
-        <h3>Login</h3>
+            error = "Invalid Email or Password! Please try again."
+            
+    content = f'''
+        <h3>Login to TaskPayBD</h3>
+        {f'<div class="alert">{error}</div>' if error else ''}
         <form method="POST">
-            Email: <input type="email" name="email" required><br><br>
-            Password: <input type="password" name="password" required><br><br>
+            <label>Email Address:</label>
+            <input type="email" name="email" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
             <button type="submit">Login</button>
         </form>
+        <p>Don't have an account? <a href="/signup">Sign Up here</a></p>
     '''
+    return render_template_string(BASE_TEMPLATE, content=content)
 
 @app.route('/dashboard')
 def dashboard():
@@ -60,16 +124,16 @@ def dashboard():
         return redirect(url_for('login'))
     user_email = session['user']
     user_data = users_db.get(user_email)
-    return f'''
+    
+    content = f'''
         <h2>User Dashboard</h2>
-        <p><strong>User:</strong> {user_email}</p>
-        <p><strong>Balance:</strong> ${user_data['balance']:.2f} USD</p>
+        <p><strong>Welcome,</strong> {user_email}</p>
+        <p><strong>Current Balance:</strong> ${user_data['balance']:.2f} USD</p>
         <hr>
-        <h3>Available Surveys</h3>
-        <p><em>Offerwall survey network will load here.</em></p>
-        <hr>
-        <a href="/logout">Logout</a>
+        <h3>Available Surveys & Offers</h3>
+        <p><em>CPX Research & BitLabs offerwalls will be integrated here soon.</em></p>
     '''
+    return render_template_string(BASE_TEMPLATE, content=content)
 
 @app.route('/logout')
 def logout():
