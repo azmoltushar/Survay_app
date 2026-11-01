@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import re
 from flask import Flask, render_template_string, request, redirect, url_for, session
 
 app = Flask(__name__)
@@ -21,7 +22,6 @@ def init_db():
 
 init_db()
 
-# Helper function to mask email (e.g., arefinhossain345@gmail.com -> ar#############5@gmail.com)
 def mask_email(email):
     try:
         name, domain = email.split('@')
@@ -186,21 +186,37 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        try:
-            conn = sqlite3.connect('database.db')
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (email, password, balance) VALUES (?, ?, ?)", (email, password, 0.00))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('login'))
-        except sqlite3.IntegrityError:
-            error = "এই ইমেইলটি ইতিমধ্যে রেজিস্টার্ড!"
+        confirm_password = request.form['confirm_password']
+        
+        # Password validation checks
+        if password != confirm_password:
+            error = "পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড একই হতে হবে!"
+        elif len(password) < 6 or len(password) > 20:
+            error = "পাসওয়ার্ড অবশ্যই ৬ থেকে ২০ অক্ষরের মধ্যে হতে হবে!"
+        elif not re.search(r'[A-Z]', password):
+            error = "পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর (A-Z) থাকতে হবে!"
+        elif not re.search(r'[a-z]', password):
+            error = "পাসওয়ার্ডে কমপক্ষে একটি ছোট হাতের অক্ষর (a-z) থাকতে হবে!"
+        elif not re.search(r'[0-9]', password):
+            error = "পাসওয়ার্ডে কমপক্ষে একটি সংখ্যা (0-9) থাকতে হবে!"
+        elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            error = "পাসওয়ার্ডে কমপক্ষে একটি স্পেশাল ক্যারেক্টার (Special Character) থাকতে হবে!"
+        else:
+            try:
+                conn = sqlite3.connect('database.db')
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO users (email, password, balance) VALUES (?, ?, ?)", (email, password, 0.00))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('login'))
+            except sqlite3.IntegrityError:
+                error = "এই ইমেইলটি ইতিমধ্যে রেজিস্টার্ড!"
 
     content = f'''
         <div class="container my-5">
             <div class="main-card">
-                <h3 class="fw-bold mb-3 text-center text-success">আপনার অ্যাকাউন্ট তৈরি করুন!</h3>
-                <p class="text-muted text-center small mb-4">নিবন্ধন সম্পূর্ণ বিনামূল্যে।</p>
+                <h3 class="fw-bold mb-2 text-center text-success">আপনার অ্যাকাউন্ট তৈরি করুন!</h3>
+                <p class="text-white text-center small mb-4">নিবন্ধন সম্পূর্ণ বিনামূল্যে।</p>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
@@ -213,29 +229,30 @@ def signup():
                         <input type="password" class="form-control" name="confirm_password" required placeholder="আপনার পাসওয়ার্ড নিশ্চিত করুন">
                     </div>
                     
-                    <div class="mb-3 small text-muted bg-dark p-3 rounded border border-secondary">
-                        <p class="fw-bold mb-1 text-white">পাসওয়ার্ড ফরম্যাট:</p>
-                        <ul class="mb-0 ps-3">
+                    <div class="mb-3 text-white bg-dark p-3 rounded border border-secondary">
+                        <p class="fw-bold mb-1 text-success">পাসওয়ার্ড ফরম্যাট:</p>
+                        <ol class="mb-0 ps-3 small text-white">
                             <li>এতে ৬ থেকে ২০টি অক্ষর থাকতে হবে।</li>
                             <li>এতে কমপক্ষে একটি বড় অক্ষর থাকতে হবে।</li>
                             <li>এতে কমপক্ষে একটি ছোট হাতের অক্ষর থাকতে হবে।</li>
                             <li>এতে ০ থেকে ৯ এর মধ্যে একটি সংখ্যা থাকতে হবে।</li>
+                            <li>এতে কমপক্ষে একটি Special Characters থাকতে হবে।</li>
                             <li>পাসওয়ার্ড এবং এর নিশ্চিতকরণ একই হতে হবে।</li>
-                        </ul>
+                        </ol>
                     </div>
 
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="terms1" required>
-                        <label class="form-check-label small text-muted" for="terms1">হ্যাঁ, আমি আপডেট, পরিষেবা এবং অফার সম্পর্কে যোগাযোগ পেতে সম্মত।</label>
+                        <label class="form-check-label small text-white" for="terms1">হ্যাঁ, আমি আপডেট, পরিষেবা এবং অফার সম্পর্কে যোগাযোগ পেতে সম্মত।</label>
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="terms2" required>
-                        <label class="form-check-label small text-muted" for="terms2">হ্যাঁ, আমি পড়েছি এবং বুঝতে পেরেছি গোপনীয়তা নীতি, সদস্যপদ শর্তাবলী, পুরস্কার সিস্টেমের নিয়ম ও শর্তাবলী।</label>
+                        <label class="form-check-label small text-white" for="terms2">হ্যাঁ, আমি পড়েছি এবং বুঝতে পেরেছি গোপনীয়তা নীতি, সদস্যপদ শর্তাবলী, পুরস্কার সিস্টেমের নিয়ম ও শর্তাবলী।</label>
                     </div>
 
-                    <button type="submit" class="btn btn-green w-100 py-2">চালিয়ে যান</button>
+                    <button type="submit" class="btn btn-green w-100 py-2">চালিয়ে যান</button>
                 </form>
-                <p class="text-center mt-3 small text-muted">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="/login" class="text-success fw-bold">লগ ইন করুন</a></p>
+                <p class="text-center mt-3 small text-white">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="/login" class="text-success fw-bold">লগ ইন করুন</a></p>
             </div>
         </div>
     '''
@@ -277,7 +294,7 @@ def login():
                     </div>
                     <button type="submit" class="btn btn-green w-100 py-2">লগ ইন</button>
                 </form>
-                <p class="text-center mt-3 small text-muted">অ্যাকাউন্ট নেই? <a href="/signup" class="text-success fw-bold">রেজিস্ট্রেশন করুন</a></p>
+                <p class="text-center mt-3 small text-white">অ্যাকাউন্ট নেই? <a href="/signup" class="text-success fw-bold">রেজিস্ট্রেশন করুন</a></p>
             </div>
         </div>
     '''
@@ -287,7 +304,6 @@ def login():
 def forgot_password():
     message = ""
     error = ""
-    masked_email_str = ""
     
     if request.method == 'POST':
         email = request.form['email']
@@ -312,7 +328,7 @@ def forgot_password():
                 
                 <form method="POST">
                     <div class="mb-3">
-                        <label class="form-label small text-muted">আপনার রেজিস্টার্ড ইমেইল দিন</label>
+                        <label class="form-label small text-white">আপনার রেজিস্টার্ড ইমেইল দিন</label>
                         <input type="email" class="form-control" name="email" required placeholder="name@example.com">
                     </div>
                     <button type="submit" class="btn btn-green w-100 py-2">ইমেইল যাচাই করুন</button>
@@ -345,21 +361,21 @@ def dashboard():
             <div class="row">
                 <div class="col-md-12 mb-4">
                     <div class="main-card" style="max-width:100%;">
-                        <h4>ড্যাশবোর্ড ওভারভিউ</h4>
-                        <p class="text-muted mb-0">স্বাগতম, <strong>{user_email}</strong></p>
+                        <h4 class="text-white">ড্যাশবোর্ড ওভারভিউ</h4>
+                        <p class="text-white mb-0">স্বাগতম, <strong>{user_email}</strong></p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="main-card text-center" style="max-width:100%;">
-                        <h6 class="text-muted">অ্যাকাউন্ট ব্যালেন্স</h6>
+                        <h6 class="text-white">অ্যাকাউন্ট ব্যালেন্স</h6>
                         <h2 class="fw-bold text-success">${balance:.2f} USD</h2>
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="main-card" style="max-width:100%;">
-                        <h5 class="fw-bold">উপলব্ধ সার্ভে এবং অফারওয়াল</h5>
-                        <hr>
-                        <p class="text-muted small">সিপিএক্স রিসার্চ এবং বিটল্যাবস সার্ভে অফারওয়াল এখানে লোড হবে।</p>
+                        <h5 class="fw-bold text-white">উপলব্ধ সার্ভে এবং অফারওয়াল</h5>
+                        <hr class="border-secondary">
+                        <p class="text-white small">সিপিএক্স রিসার্চ এবং বিটল্যাবস সার্ভে অফারওয়াল এখানে লোড হবে।</p>
                         <button class="btn btn-green btn-sm" disabled>সার্ভে লোড হচ্ছে...</button>
                     </div>
                 </div>
