@@ -41,6 +41,7 @@ BASE_TEMPLATE = '''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskPayBD - Paid Survey Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #070d1b; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .navbar { background: #070d1b; border-bottom: 1px solid #1c2541; padding: 15px 30px; }
@@ -50,6 +51,7 @@ BASE_TEMPLATE = '''
         .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 500px; margin: 40px auto; }
         .form-control { background-color: #030712; border: 1px solid #374151; color: white; padding: 12px; border-radius: 8px; }
         .form-control:focus { background-color: #030712; color: white; border-color: #22c55e; box-shadow: none; }
+        .input-group-text { background-color: #030712; border: 1px solid #374151; color: #9ca3af; cursor: pointer; }
         .feature-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 25px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color: #ffffff; }
         .step-box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; margin-top: 15px; color: #ffffff; }
         .hero-section { background: linear-gradient(180deg, #14532d 0%, #070d1b 100%); padding: 60px 20px; text-align: center; border-bottom: 2px solid #1c2541; }
@@ -108,6 +110,21 @@ BASE_TEMPLATE = '''
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword(fieldId, iconId) {
+            const passwordField = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
 </body>
 </html>
 '''
@@ -188,7 +205,6 @@ def signup():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         
-        # Password validation checks
         if password != confirm_password:
             error = "পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড একই হতে হবে!"
         elif len(password) < 6 or len(password) > 20:
@@ -222,11 +238,17 @@ def signup():
                     <div class="mb-3">
                         <input type="email" class="form-control" name="email" required placeholder="ই-মেইল">
                     </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" name="password" required placeholder="পাসওয়ার্ড">
+                    <div class="mb-3 input-group">
+                        <input type="password" class="form-control" name="password" id="regPass" required placeholder="পাসওয়ার্ড">
+                        <span class="input-group-text" onclick="togglePassword('regPass', 'regIcon')">
+                            <i class="fa-solid fa-eye" id="regIcon"></i>
+                        </span>
                     </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" name="confirm_password" required placeholder="আপনার পাসওয়ার্ড নিশ্চিত করুন">
+                    <div class="mb-3 input-group">
+                        <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="আপনার পাসওয়ার্ড নিশ্চিত করুন">
+                        <span class="input-group-text" onclick="togglePassword('confPass', 'confIcon')">
+                            <i class="fa-solid fa-eye" id="confIcon"></i>
+                        </span>
                     </div>
                     
                     <div class="mb-3 text-white bg-dark p-3 rounded border border-secondary">
@@ -286,8 +308,11 @@ def login():
                     <div class="mb-3">
                         <input type="email" class="form-control" name="email" required placeholder="name@example.com">
                     </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" name="password" required placeholder="••••••••">
+                    <div class="mb-3 input-group">
+                        <input type="password" class="form-control" name="password" id="loginPass" required placeholder="••••••••">
+                        <span class="input-group-text" onclick="togglePassword('loginPass', 'loginIcon')">
+                            <i class="fa-solid fa-eye" id="loginIcon"></i>
+                        </span>
                     </div>
                     <div class="mb-3 text-end">
                         <a href="/forgot-password" class="small text-success text-decoration-none">পাসওয়ার্ড ভুলে গেছেন?</a>
