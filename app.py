@@ -277,7 +277,7 @@ def terms():
                 
                 <h5 class="text-success fw-bold mt-4">২. সার্ভে ও টাস্ক সম্পর্কিত নিয়মাবলী</h5>
                 <p class="text-light">২.১. সার্ভে সম্পন্ন করার সময় সবসময় সৎ এবং সঠিক তথ্য প্রদান করতে হবে। মিথ্যা বা বিভ্রান্তিকর তথ্য দিলে সার্ভে রিজেক্ট হতে পারে。<br>
-                ২.২. কোনো প্রকার ভিপিএন (VPN), প্রক্সি (Proxy) বা বট (Bot) সফটওয়্যার ব্যবহার করা সম্পূর্ণ নিষিদ্ধ। ভিপিএন ব্যবহারের প্রমাণ পাওয়া গেলে অ্যাকাউন্ট সাথে সাথে স্থগিত (Ban) করা হবে।<br>
+                ২.২. কোনো প্রকার ভিপিএন (VPN), প্রক্সি (Proxy) বা বট (Bot) সফটওয়্যার ব্যবহার করা সম্পূর্ণ নিষিদ্ধ। ভিপিএন ব্যবহারের প্রমাণ পাওয়া গেলে অ্যাকাউন্ট সাথে সাথে স্থগিত (Ban) করা হবে。<br>
                 ২.৩. সার্ভে প্রদানকারী নেটওয়ার্ক (যেমন CPX Research, BitLabs) যদি কোনো কাজ বাতিল ঘোষণা করে, তবে তার পয়েন্ট বা রিওয়ার্ড ব্যালেন্স থেকে কেটে নেওয়া হতে পারে।</p>
                 
                 <h5 class="text-success fw-bold mt-4">৩. ব্যালেন্স ও পেমেন্ট (উইথড্র) নীতি</h5>
@@ -569,7 +569,7 @@ def dashboard():
                                 <input type="text" class="form-control" name="number" required placeholder="01XXXXXXXXX">
                             </div>
                             <div class="mb-3 text-start">
-                                <label class="form-label small text-white">পরিমাণ (BDT)</label>
+                                <label class="form-label smalltext-white">পরিমাণ (BDT)</label>
                                 <input type="number" step="1.00" class="form-control" name="amount" required placeholder="100">
                             </div>
                             <button type="submit" class="btn btn-green w-100 py-2">উইথড্র রিকোয়েস্ট পাঠান</button>
