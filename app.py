@@ -84,7 +84,7 @@ BASE_TEMPLATE = '''
         .brand-logo { font-weight: 800; font-size: 24px; color: #22c55e; text-decoration: none; }
         .btn-green { background-color: #16a34a; color: white; font-weight: 600; border-radius: 6px; padding: 8px 20px; text-decoration: none; }
         .btn-green:hover { background-color: #15803d; color: white; }
-        .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 500px; margin: 40px auto; }
+        .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 600px; margin: 40px auto; }
         .form-control, .form-select { background-color: #030712; border: 1px solid #374151; color: white; padding: 12px; border-radius: 8px; }
         .form-control:focus, .form-select:focus { background-color: #030712; color: white; border-color: #22c55e; box-shadow: none; }
         .input-group-text { background-color: #030712; border: 1px solid #374151; color: #9ca3af; cursor: pointer; }
@@ -185,6 +185,7 @@ def home():
         <div class="hero-section">
             <div class="container">
                 <h1 class="display-5 fw-bold mb-4 text-white">পেইড সার্ভে করে আয় করুন</h1>
+                <p class="lead text-light mb-4">TaskPayBD প্ল্যাটফর্মে আপনাকে স্বাগতম। অনলাইন সার্ভে করে প্রতিদিন সহজে ইনকাম করুন।</p>
                 <div class="row g-4 mt-3">
                     <div class="col-md-4">
                         <div class="feature-card text-start">
@@ -207,6 +208,37 @@ def home():
                 </div>
             </div>
         </div>
+
+        <div class="container my-5 text-center">
+            <h2 class="fw-bold mb-3 text-white">কিভাবে কাজ শুরু করবেন?</h2>
+            <p class="text-white mb-4">মাত্র ৩টি সহজ ধাপে আপনার ইনকাম যাত্রা শুরু করুন:</p>
+            <div class="row text-start">
+                <div class="col-md-4 mb-3">
+                    <div class="step-box">
+                        <h4 class="text-success fw-bold">১. ফ্রি রেজিস্ট্রেশন</h4>
+                        <p class="small text-white mb-0">ইমেইল ও পাসওয়ার্ড দিয়ে খুব সহজেই আপনার ফ্রি একাউন্ট তৈরি করে নিন।</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="step-box">
+                        <h4 class="text-success fw-bold">২. সার্ভে সম্পন্ন করুন</h4>
+                        <p class="small text-white mb-0">উপলব্ধ সার্ভেগুলো পূরণ করে আপনার ব্যালেন্স বৃদ্ধি করুন।</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="step-box">
+                        <h4 class="text-success fw-bold">৩. পেমেন্ট গ্রহণ</h4>
+                        <p class="small text-white mb-0">মিনিমাম ১০০ টাকা হলেই বিকাশ বা নগদে টাকা তুলে নিন।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-banner">
+                <h3 class="fw-bold mb-3 text-white">আজই শুরু করুন আপনার পেইড সার্ভে যাত্রা!</h3>
+                <p class="small text-white mb-4">কোনো অভিজ্ঞতা বা বিনিয়োগ ছাড়াই কাজ শুরু করা যায়।</p>
+                <a href="/signup" class="btn btn-light text-success fw-bold px-4 py-2 rounded-pill">এখনই ফ্রি অ্যাকাউন্ট তৈরি করুন</a>
+            </div>
+        </div>
     '''
     return render_template_string(BASE_TEMPLATE, content=content)
 
@@ -215,19 +247,14 @@ def surveys():
     content = '''
         <div class="container my-5">
             <div class="main-card" style="max-width:800px;">
-                <h3 class="fw-bold text-success mb-3">All Available Surveys (সকল উপলব্ধ সার্ভে)</h3>
-                <p class="text-white small mb-4">নিচের তালিকা থেকে যেকোনো সার্ভেতে ক্লিক করে কাজ শুরু করতে পারেন:</p>
-                <div class="list-group">
-                    <div class="list-group-item bg-dark text-white border-secondary mb-3 p-3 rounded">
-                        <h5 class="text-success fw-bold">Best Survey #1: CPX Daily Consumer Survey</h5>
-                        <p class="small mb-2">Reward: ৳120 BDT (Estimated time: 10 mins)</p>
-                        <button class="btn btn-green btn-sm" onclick="alert('Survey starting...')">সার্ভে শুরু করুন</button>
-                    </div>
-                    <div class="list-group-item bg-dark text-white border-secondary mb-3 p-3 rounded">
-                        <h5 class="text-success fw-bold">BitLabs High Paying Opinion Poll</h5>
-                        <p class="small mb-2">Reward: ৳250 BDT (Estimated time: 15 mins)</p>
-                        <button class="btn btn-green btn-sm" onclick="alert('Survey starting...')">সার্ভে শুরু করুন</button>
-                    </div>
+                <h3 class="fw-bold text-success mb-3">All Available Surveys</h3>
+                <p class="text-white small mb-4">নিচের প্রধান সার্ভে বক্সে ক্লিক করে আপনার কাজ শুরু করুন:</p>
+                
+                <div class="p-4 bg-dark rounded border border-success text-center">
+                    <span class="badge bg-success mb-2">Featured Offerwall</span>
+                    <h5 class="text-white fw-bold mb-2">CPX Research & BitLabs Live Survey Wall</h5>
+                    <p class="small text-muted mb-3">এখানে আপনার জন্য সমস্ত লাইভ সার্ভে একসাথে লোড হবে।</p>
+                    <button class="btn btn-green px-4 py-2" onclick="alert('Survey loading...')">সার্ভে লোড করুন</button>
                 </div>
             </div>
         </div>
@@ -238,9 +265,36 @@ def surveys():
 def terms():
     content = '''
         <div class="container my-5">
-            <div class="main-card" style="max-width:800px;">
-                <h3 class="fw-bold text-success mb-3">Terms & Conditions</h3>
-                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ১০০ টাকা।</p>
+            <div class="main-card" style="max-width:900px; text-align: justify;">
+                <h2 class="fw-bold text-success mb-4 text-center">Terms and Conditions (শর্তাবলী ও নিয়মাবলী)</h2>
+                
+                <p class="text-light">স্বাগতম <strong>TaskPayBD</strong> প্ল্যাটফর্মে। আমাদের সেবা ব্যবহার করার আগে দয়া করে নিচের শর্তাবলীগুলো মনোযোগ দিয়ে পড়ুন। আপনি যদি আমাদের প্ল্যাটফর্মে অ্যাকাউন্ট তৈরি করেন বা ব্যবহার করেন, তবে ধরে নেওয়া হবে যে আপনি এই নিয়মাবলীতে সম্মত হয়েছেন।</p>
+                
+                <h5 class="text-success fw-bold mt-4">১. অ্যাকাউন্ট তৈরি ও নিরাপত্তা</h5>
+                <p class="text-light">১.১. একজন ব্যবহারকারী শুধুমাত্র একটি মাত্র অ্যাকাউন্ট তৈরি করার অনুমতি পাবেন। একটি ডিভাইস বা একটি IP ঠিকানা থেকে একাধিক অ্যাকাউন্ট তৈরি করা সম্পূর্ণ নিষিদ্ধ।<br>
+                ১.২. রেজিস্ট্রেশনের সময় অবশ্যই সঠিক ইমেইল ঠিকানা প্রদান করতে হবে। ইমেইল ভেরিফিকেশন (OTP) সম্পন্ন না হলে অ্যাকাউন্ট সক্রিয় হবে না।<br>
+                ১.৩. আপনার অ্যাকাউন্টের পাসওয়ার্ড গোপন রাখার দায়িত্ব সম্পূর্ণ আপনার। অ্যাকাউন্টের কোনো অপব্যবহারের জন্য কর্তৃপক্ষ দায়ী থাকবে না।</p>
+                
+                <h5 class="text-success fw-bold mt-4">২. সার্ভে ও টাস্ক সম্পর্কিত নিয়মাবলী</h5>
+                <p class="text-light">২.১. সার্ভে সম্পন্ন করার সময় সবসময় সৎ এবং সঠিক তথ্য প্রদান করতে হবে। মিথ্যা বা বিভ্রান্তিকর তথ্য দিলে সার্ভে রিজেক্ট হতে পারে।<br>
+                ২.২. কোনো প্রকার ভিপিএন (VPN), প্রক্সি (Proxy) বা বট (Bot) সফটওয়্যার ব্যবহার করা সম্পূর্ণ নিষিদ্ধ। ভিপিএন ব্যবহারের প্রমাণ পাওয়া গেলে অ্যাকাউন্ট সাথে সাথে স্থগিত (Ban) করা হবে।<br>
+                ২.৩. সার্ভে প্রদানকারী নেটওয়ার্ক (যেমন CPX Research, BitLabs) যদি কোনো কাজ বাতিল ঘোষণা করে, তবে তার পয়েন্ট বা রিওয়ার্ড ব্যালেন্স থেকে কেটে নেওয়া হতে পারে।</p>
+                
+                <h5 class="text-success fw-bold mt-4">৩. ব্যালেন্স ও পেমেন্ট (উইথড্র) নীতি</h5>
+                <p class="text-light">৩.১. আপনার অ্যাকাউন্টে সর্বনিম্ন <strong>১০-০.০০ BDT (৳১০০ টাকা)</strong> অর্জিত হলেই কেবল উইথড্র রিকোয়েস্ট পাঠাতে পারবেন।<br>
+                ৩.২. উইথড্র প্রদান করার জন্য শুধুমাত্র বৈধ বিকাশ (Bkash) অথবা নগদ (Nagad) নম্বর ব্যবহার করতে হবে। ভুল নম্বর দিয়ে টাকা না পেলে কর্তৃপক্ষ দায়ী থাকবে না।<br>
+                ৩.৩. প্রতিটি উইথড্র রিকোয়েস্ট ম্যানুয়ালি যাচাই-বাছাই করা হয়। সাধারণত ২৪ থেকে ৪৮ ঘণ্টার মধ্যে পেমেন্ট প্রসেস করা হয়।</p>
+                
+                <h5 class="text-success fw-bold mt-4">৪. অ্যাকাউন্ট স্থগিতকরণ ও নিষিদ্ধকরণ</h5>
+                <p class="text-light">৪.১. প্রতারণা, স্প্যামিং বা অনৈতিক উপায়ে ব্যালেন্স বাড়ানোর চেষ্টা করলে পূর্বঘোষণা ছাড়াই অ্যাকাউন্ট স্থায়ীভাবে ব্যান করা হবে।<br>
+                ৪.২. ব্যান হওয়া অ্যাকাউন্টের অর্জিত ব্যালেন্স বাজেয়াপ্ত করা হবে এবং পরবর্তীতে আর কোনো অ্যাকাউন্ট খুলতে দেওয়া হবে না।</p>
+                
+                <h5 class="text-success fw-bold mt-4">৫. নিয়মাবলী পরিবর্তন</h5>
+                <p class="text-light">TaskPayBD কর্তৃপক্ষ যেকোনো সময় এই নিয়মাবলী পরিবর্তন বা আপডেট করার অধিকার সংরক্ষণ করে। নিয়ম পরিবর্তনের পর সাইট ব্যবহার অব্যাহত রাখলে তা আপনার সম্মতি হিসেবে গণ্য হবে।</p>
+                
+                <div class="mt-4 pt-3 border-top border-secondary text-center">
+                    <p class="small text-muted mb-0">সর্বশেষ আপডেট: ২০২৬ | যেকোনো সহায়তায় যোগাযোগ করুন: arefinhossain345@gmail.com</p>
+                </div>
             </div>
         </div>
     '''
@@ -515,21 +569,12 @@ def dashboard():
 
                 <div class="col-md-8">
                     <div class="main-card mb-4" style="max-width:100%;">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="fw-bold text-white mb-0">উপলব্ধ সার্ভে (Available Surveys)</h5>
-                            <a href="/surveys" class="btn btn-outline-success btn-sm">সব সার্ভে দেখুন (All Surveys)</a>
-                        </div>
+                        <h5 class="fw-bold text-white mb-3">উপলব্ধ সার্ভে (Available Survey Wall)</h5>
                         <hr class="border-secondary">
-                        <div class="p-3 bg-dark rounded border border-success mb-3 text-start">
-                            <span class="badge bg-success mb-1">Top Best Survey</span>
-                            <h6 class="text-white fw-bold">CPX Research Special Survey</h6>
-                            <p class="small text-muted mb-2">Reward: ৳150 BDT | Time: 8 mins</p>
-                            <a href="/surveys" class="btn btn-green btn-sm px-4">সার্ভে শুরু করুন</a>
-                        </div>
-                        <div class="p-4 bg-dark rounded border border-secondary text-center">
-                            <h6 class="text-success fw-bold mb-2">CPX Research & BitLabs Survey Wall</h6>
-                            <p class="small text-white mb-3">এখানে অফারওয়ালের সার্ভে লোড হবে।</p>
-                            <a href="/surveys" class="btn btn-green btn-sm px-4">অফারওয়াল সার্ভে দেখুন</a>
+                        <div class="p-4 bg-dark rounded border border-success text-center">
+                            <h5 class="text-success fw-bold mb-2">CPX Research & BitLabs Survey Box</h5>
+                            <p class="small text-white mb-3">নিচের বাটনে ক্লিক করে অফারওয়ালের সকল সার্ভে একসাথে লোড করুন।</p>
+                            <a href="/surveys" class="btn btn-green px-4 py-2">সার্ভে শুরু করুন</a>
                         </div>
                     </div>
 
