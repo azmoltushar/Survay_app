@@ -240,7 +240,7 @@ def terms():
         <div class="container my-5">
             <div class="main-card" style="max-width:800px;">
                 <h3 class="fw-bold text-success mb-3">Terms & Conditions</h3>
-                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ১০০ টাকা।</p>
+                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ৫০০ টাকা।</p>
             </div>
         </div>
     '''
@@ -264,7 +264,7 @@ def contact():
         <div class="container my-5">
             <div class="main-card" style="max-width:800px;">
                 <h3 class="fw-bold text-success mb-3">Contact Us</h3>
-                <p class="text-white small">যেকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
+                <p class="text-white small">ಯোকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
             </div>
         </div>
     '''
@@ -440,8 +440,8 @@ def dashboard():
         row = cursor.fetchone()
         current_balance_bdt = row[0] if row else 0.0
 
-        if amount_bdt < 100.0:
-            error = "ন্যূনতম উইথড্র পরিমাণ ১০০.০০ BDT!"
+        if amount_bdt < 500.0:
+            error = "ন্যূনতম উইথড্র পরিমাণ ৫০০.০০ BDT!"
         elif amount_bdt > current_balance_bdt:
             error = "পর্যাপ্ত ব্যালেন্স নেই!"
         else:
@@ -506,7 +506,7 @@ def dashboard():
                             </div>
                             <div class="mb-3 text-start">
                                 <label class="form-label small text-white">পরিমাণ (BDT)</label>
-                                <input type="number" step="1.00" class="form-control" name="amount" required placeholder="100">
+                                <input type="number" step="1.00" class="form-control" name="amount" required placeholder="500">
                             </div>
                             <button type="submit" class="btn btn-green w-100 py-2">উইথড্র রিকোয়েস্ট পাঠান</button>
                         </form>
