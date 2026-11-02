@@ -87,32 +87,4 @@ BASE_TEMPLATE = '''
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskPayBD - Paid Survey Platform</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background-color: #070d1b; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .navbar { background: #070d1b; border-bottom: 1px solid #1c2541; padding: 15px 30px; }
-        .brand-logo { font-weight: 800; font-size: 24px; color: #22c55e; text-decoration: none; }
-        .btn-green { background-color: #16a34a; color: white; font-weight: 600; border-radius: 6px; padding: 8px 20px; text-decoration: none; }
-        .btn-green:hover { background-color: #15803d; color: white; }
-        .main-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 500px; margin: 40px auto; }
-        .form-control, .form-select { background-color: #030712; border: 1px solid #374151; color: white; padding: 12px; border-radius: 8px; }
-        .form-control:focus, .form-select:focus { background-color: #030712; color: white; border-color: #22c55e; box-shadow: none; }
-        .input-group-text { background-color: #030712; border: 1px solid #374151; color: #9ca3af; cursor: pointer; }
-        .feature-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 25px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color: #ffffff; }
-        .step-box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; margin-top: 15px; color: #ffffff; }
-        .hero-section { background: linear-gradient(180deg, #14532d 0%, #070d1b 100%); padding: 60px 20px; text-align: center; border-bottom: 2px solid #1c2541; }
-        .cta-banner { background: linear-gradient(135deg, #14532d 0%, #166534 100%); border-radius: 12px; padding: 40px; margin: 50px 0; text-align: center; border: 1px solid #22c55e; }
-        .footer-section { background-color: #040812; color: #9ca3af; padding: 40px 0 20px 0; border-top: 1px solid #1f2937; font-size: 14px; }
-        .footer-section a { color: #9ca3af; text-decoration: none; }
-        .footer-section a:hover { color: #ffffff; }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="brand-logo" href="/">TaskPayBD</a>
-            <div class="ms-auto d-flex align-items-center">
-                {% if 'user' in session %}
-                    <a href="/dashboard" class="btn btn-outline-success rounded-pill px-4 me-2">ড্যাশবোর্ড</a>
-                    <a href="/logout" class="btn btn-outline-danger rounded-pill px
+    <link href="
