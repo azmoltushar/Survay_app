@@ -356,7 +356,7 @@ def signup():
                             আমি <a href="/terms" target="_blank" class="text-success">Terms & Conditions</a> পড়েছি এবং সম্মত আছি।
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-green w-100 py-2">ওটিপি পাঠান</button>
+                    <button type="submit" class="btn btn-green w-100 py-2">রেজিস্ট্রেশন করুন</button>
                 </form>
                 <p class="text-center mt-3 small text-white">Already have an account? <a href="/login" class="text-success fw-bold">লগ ইন করুন</a></p>
             </div>
@@ -370,6 +370,16 @@ def verify_otp():
     email = session.get('pending_email')
     if not email:
         return redirect(url_for('signup'))
+
+    # Gmail mask: prothom 2 ti ebong shesh 2 ti letter dekhabe, majkhane #### thakbe
+    if '@' in email:
+        name_part, domain_part = email.split('@', 1)
+        if len(name_part) > 4:
+            masked_email = name_part[:2] + "####" + name_part[-2:] + "@" + domain_part
+        else:
+            masked_email = name_part[:1] + "##" + "@" + domain_part
+    else:
+        masked_email = email
 
     if request.method == 'POST':
         user_otp = request.form['otp']
@@ -393,9 +403,10 @@ def verify_otp():
 
     content = f'''
         <div class="container my-5">
-            <div class="main-card">
-                <h3 class="fw-bold mb-2 text-center text-success">ইমেইল ভেরিফিকেশন</h3>
-                <p class="text-center small text-white">Enter the 6-digit OTP sent to your email.</p>
+            <div class="main-card text-center">
+                <h3 class="fw-bold mb-2 text-success">ইমেইল ভেরিফিকেশন</h3>
+                <p class="small text-white mb-1"><strong>{masked_email}</strong> gmail a patha no hoiyeche</p>
+                <p class="small text-success mb-3">একটি ভেরিফিকেশন কোড পাঠানো হয়েছে</p>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
