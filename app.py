@@ -89,9 +89,9 @@ BASE_TEMPLATE = '''
         .form-control:focus, .form-select:focus { background-color: #030712; color: white; border-color: #22c55e; box-shadow: none; }
         .input-group-text { background-color: #030712; border: 1px solid #374151; color: #9ca3af; cursor: pointer; }
         .feature-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 25px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color: #ffffff; }
-        .step-box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; margin-top: 15px; color: #ffffff; }
+        .step-box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; height: 100%; color: #ffffff; }
         .hero-section { background: linear-gradient(180deg, #14532d 0%, #070d1b 100%); padding: 60px 20px; text-align: center; border-bottom: 2px solid #1c2541; }
-        .cta-banner { background: linear-gradient(135deg, #14532d 0%, #166534 100%); border-radius: 12px; padding: 40px; margin: 50px 0; text-align: center; border: 1px solid #22c55e; }
+        .cta-banner { background: linear-gradient(135deg, #14532d 0%, #166534 100%); border-radius: 12px; padding: 40px; margin: 40px 0; text-align: center; border: 1px solid #22c55e; }
         .footer-section { background-color: #040812; color: #9ca3af; padding: 40px 0 20px 0; border-top: 1px solid #1f2937; font-size: 14px; }
         .footer-section a { color: #9ca3af; text-decoration: none; }
         .footer-section a:hover { color: #ffffff; }
@@ -184,8 +184,9 @@ def home():
     content = '''
         <div class="hero-section">
             <div class="container">
-                <h1 class="display-5 fw-bold mb-4 text-white">পেইড সার্ভে করে আয় করুন</h1>
-                <div class="row g-4 mt-3">
+                <h1 class="display-5 fw-bold mb-3 text-white">পেইড সার্ভে করে আয় করুন</h1>
+                <p class="text-light mb-4">TaskPayBD প্ল্যাটফর্মে আপনাকে স্বাগতম। অনলাইন সার্ভে করে প্রতিদিন সহজে ইনকাম করুন।</p>
+                <div class="row g-4 mt-2 justify-content-center">
                     <div class="col-md-4">
                         <div class="feature-card text-start">
                             <h5 class="fw-bold text-success mb-2">⏱️ দ্রুত সার্ভে</h5>
@@ -207,14 +208,45 @@ def home():
                 </div>
             </div>
         </div>
+
+        <div class="container my-5 text-center" style="max-width: 1000px;">
+            <h2 class="fw-bold mb-2 text-white">কিভাবে কাজ শুরু করবেন?</h2>
+            <p class="text-muted mb-4">মাত্র ৩টি সহজ ধাপে আপনার ইনকাম যাত্রা শুরু করুন:</p>
+            <div class="row text-start g-4">
+                <div class="col-md-4">
+                    <div class="step-box">
+                        <h5 class="text-success fw-bold mb-2">১. ফ্রি রেজিস্ট্রেশন</h5>
+                        <p class="small text-white mb-0">ইমেইল ও পাসওয়ার্ড দিয়ে খুব সহজেই আপনার ফ্রি একাউন্ট তৈরি করে নিন।</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-box">
+                        <h5 class="text-success fw-bold mb-2">২. সার্ভে সম্পন্ন করুন</h5>
+                        <p class="small text-white mb-0">উপলব্ধ সার্ভেগুলো পূরণ করে আপনার ব্যালেন্স বৃদ্ধি করুন।</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-box">
+                        <h5 class="text-success fw-bold mb-2">৩. পেমেন্ট গ্রহণ</h5>
+                        <p class="small text-white mb-0">মিনিমাম ১০০ টাকা হলেই বিকাশ বা নগদে টাকা তুলে নিন।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-banner">
+                <h3 class="fw-bold mb-2 text-white">আজই শুরু করুন আপনার পেইড সার্ভে যাত্রা!</h3>
+                <p class="small text-light mb-3">কোনো অভিজ্ঞতা বা বিনিয়োগ ছাড়াই কাজ শুরু করা যায়।</p>
+                <a href="/signup" class="btn btn-light text-success fw-bold px-4 py-2 rounded-pill">এখনই ফ্রি অ্যাকাউন্ট তৈরি করুন</a>
+            </div>
+        </div>
     '''
     return render_template_string(BASE_TEMPLATE, content=content)
 
 @app.route('/surveys')
 def surveys():
     content = '''
-        <div class="container my-5">
-            <div class="main-card" style="max-width:800px;">
+        <div class="container my-5" style="max-width: 800px;">
+            <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">All Available Surveys (সকল উপলব্ধ সার্ভে)</h3>
                 <p class="text-white small mb-4">নিচের তালিকা থেকে যেকোনো সার্ভেতে ক্লিক করে কাজ শুরু করতে পারেন:</p>
                 <div class="list-group">
@@ -237,10 +269,10 @@ def surveys():
 @app.route('/terms')
 def terms():
     content = '''
-        <div class="container my-5">
-            <div class="main-card" style="max-width:800px;">
+        <div class="container my-5" style="max-width: 800px;">
+            <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">Terms & Conditions</h3>
-                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ৫০০ টাকা।</p>
+                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ১০০ টাকা।</p>
             </div>
         </div>
     '''
@@ -249,8 +281,8 @@ def terms():
 @app.route('/about')
 def about():
     content = '''
-        <div class="container my-5">
-            <div class="main-card" style="max-width:800px;">
+        <div class="container my-5" style="max-width: 800px;">
+            <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">About Us</h3>
                 <p class="text-white small">TaskPayBD হলো বাংলাদেশের একটি বিশ্বস্ত পেইড সার্ভে প্ল্যাটফর্ম, যার মাধ্যমে ঘরে বসে সহজে আয় করা সম্ভব।</p>
             </div>
@@ -261,10 +293,10 @@ def about():
 @app.route('/contact')
 def contact():
     content = '''
-        <div class="container my-5">
-            <div class="main-card" style="max-width:800px;">
+        <div class="container my-5" style="max-width: 800px;">
+            <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">Contact Us</h3>
-                <p class="text-white small">ಯোকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
+                <p class="text-white small">যেকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
             </div>
         </div>
     '''
@@ -440,8 +472,8 @@ def dashboard():
         row = cursor.fetchone()
         current_balance_bdt = row[0] if row else 0.0
 
-        if amount_bdt < 500.0:
-            error = "ন্যূনতম উইথড্র পরিমাণ ৫০০.০০ BDT!"
+        if amount_bdt < 100.0:
+            error = "ন্যূনতম উইথড্র পরিমাণ ১০০.০০ BDT!"
         elif amount_bdt > current_balance_bdt:
             error = "পর্যাপ্ত ব্যালেন্স নেই!"
         else:
@@ -506,7 +538,7 @@ def dashboard():
                             </div>
                             <div class="mb-3 text-start">
                                 <label class="form-label small text-white">পরিমাণ (BDT)</label>
-                                <input type="number" step="1.00" class="form-control" name="amount" required placeholder="500">
+                                <input type="number" step="1.00" class="form-control" name="amount" required placeholder="100">
                             </div>
                             <button type="submit" class="btn btn-green w-100 py-2">উইথড্র রিকোয়েস্ট পাঠান</button>
                         </form>
