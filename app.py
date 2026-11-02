@@ -56,7 +56,7 @@ def send_otp_email(receiver_email, otp_code):
         msg['To'] = receiver_email
         msg['Subject'] = "TaskPayBD - Email Verification OTP"
         
-        body = f"আপনার TaskPayBD অ্যাকাউন্ট রেজিস্ট্রেশনের জন্য ওটিপি (OTP) কোড হলো: {otp_code}\nকোডটি কারো সাথে শেয়ার করবেন না।"
+        body = f"Apanar TaskPayBD account registration-er jonno OTP code holo: {otp_code}\nCode karo sathe share korben na."
         msg.attach(MIMEText(body, 'plain'))
         
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -68,17 +68,6 @@ def send_otp_email(receiver_email, otp_code):
     except Exception as e:
         print(f"SMTP Error: {e}")
         return False
-
-def mask_email(email):
-    try:
-        name, domain = email.split('@')
-        if len(name) <= 3:
-            masked = name[0] + '***'
-        else:
-            masked = name[:2] + '#' * (len(name) - 3) + name[-1]
-        return f"{masked}@{domain}"
-    except:
-        return email
 
 BASE_TEMPLATE = '''
 <!DOCTYPE html>
@@ -112,14 +101,26 @@ BASE_TEMPLATE = '''
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="brand-logo" href="/">TaskPayBD</a>
-            <div class="ms-auto d-flex align-items-center">
-                {% if 'user' in session %}
-                    <a href="/dashboard" class="btn btn-outline-success rounded-pill px-4 me-2">ড্যাশবোর্ড</a>
-                    <a href="/logout" class="btn btn-outline-danger rounded-pill px-4">লগ আউট</a>
-                {% else %}
-                    <a href="/login" class="btn btn-outline-success rounded-pill px-4 me-2">লগ ইন</a>
-                    <a href="/signup" class="btn btn-green rounded-pill px-4">রেজিস্ট্রেশন</a>
-                {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link text-white" href="/">হোম</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/surveys">Surveys</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/terms">Terms & Conditions</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/contact">Contact Us</a></li>
+                </ul>
+                <div class="ms-lg-3 d-flex align-items-center mt-3 mt-lg-0">
+                    {% if 'user' in session %}
+                        <a href="/dashboard" class="btn btn-outline-success rounded-pill px-4 me-2">ড্যাশবোর্ড</a>
+                        <a href="/logout" class="btn btn-outline-danger rounded-pill px-4">লগ আউট</a>
+                    {% else %}
+                        <a href="/login" class="btn btn-outline-success rounded-pill px-4 me-2">লগ ইন</a>
+                        <a href="/signup" class="btn btn-green rounded-pill px-4">রেজিস্ট্রেশন</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
@@ -133,25 +134,24 @@ BASE_TEMPLATE = '''
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold text-white">TaskPayBD</h5>
-                    <p class="small text-white">TaskPayBD-একটি প্রচলিত সার্ভে প্ল্যাটফর্ম বা অফারওয়ালের মাধ্যমে ঘরে বসে ইনকামের সুযোগ দেয়।</p>
+                    <p class="small text-white">TaskPayBD - Bangladeshi trusted paid survey platform.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <h6 class="fw-bold text-white">দ্রুত লিঙ্ক</h6>
                     <ul class="list-unstyled small">
-                        <li><a href="/">হোম</a></li>
-                        <li><a href="#">কিভাবে কাজ করে</a></li>
+                        <li><a href="/surveys">Surveys</a></li>
+                        <li><a href="/terms">Terms & Conditions</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 mb-4">
                     <h6 class="fw-bold text-white">যোগাযোগ ও সাহায্য</h6>
                     <p class="small mb-1 text-white">Email: arefinhossain345@gmail.com</p>
-                    <p class="small mb-1"><a href="https://facebook.com" target="_blank">Facebook: Profile Link</a></p>
                     <p class="small text-white">ঠিকানা: ঢাকা, বাংলাদেশ</p>
                 </div>
             </div>
             <hr class="border-secondary">
             <div class="text-center small pb-3 text-white">
-                &copy; ২০২৬ TaskPayBD. সর্বস্বত্ব সংরক্ষিত।
+                &copy; 2026 TaskPayBD. All rights reserved.
             </div>
         </div>
     </footer>
@@ -188,8 +188,8 @@ def home():
                 <div class="row g-4 mt-3">
                     <div class="col-md-4">
                         <div class="feature-card text-start">
-                            <h5 class="fw-bold text-success mb-2">⏱️ দ্রুত সার্ভে (৫-১০ মিনিট)</h5>
-                            <p class="small text-white mb-0">সহজ সার্ভে সম্পন্ন করে দ্রুত পয়েন্ট অর্জন করুন।</p>
+                            <h5 class="fw-bold text-success mb-2">⏱️ দ্রুত সার্ভে</h5>
+                            <p class="small text-white mb-0">সহজ সার্ভে সম্পন্ন করে দ্রুত টাকা অর্জন করুন।</p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -207,38 +207,64 @@ def home():
                 </div>
             </div>
         </div>
+    '''
+    return render_template_string(BASE_TEMPLATE, content=content)
 
-        <div class="container my-5 text-center">
-            <h2 class="fw-bold mb-3 text-white">কিভাবে শুরু করবেন?</h2>
-            <p class="text-white mb-5">মাত্র ৩টি সহজ ধাপে কাজ শুরু করুন।</p>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="step-box text-start">
-                        <span class="badge bg-success rounded-pill px-3 py-2 mb-2">১</span>
-                        <h5 class="fw-bold text-white">ফ্রি অ্যাকাউন্ট তৈরি করুন:</h5>
-                        <p class="small text-white mb-0">আপনার নাম এবং ইমেইল দিয়ে মাত্র ১ মিনিটেই ফ্রি অ্যাকাউন্ট খুলুন।</p>
+@app.route('/surveys')
+def surveys():
+    content = '''
+        <div class="container my-5">
+            <div class="main-card" style="max-width:800px;">
+                <h3 class="fw-bold text-success mb-3">All Available Surveys (সকল উপলব্ধ সার্ভে)</h3>
+                <p class="text-white small mb-4">নিচের তালিকা থেকে যেকোনো সার্ভেতে ক্লিক করে কাজ শুরু করতে পারেন:</p>
+                <div class="list-group">
+                    <div class="list-group-item bg-dark text-white border-secondary mb-3 p-3 rounded">
+                        <h5 class="text-success fw-bold">Best Survey #1: CPX Daily Consumer Survey</h5>
+                        <p class="small mb-2">Reward: ৳120 BDT (Estimated time: 10 mins)</p>
+                        <button class="btn btn-green btn-sm" onclick="alert('Survey starting...')">সার্ভে শুরু করুন</button>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="step-box text-start">
-                        <span class="badge bg-success rounded-pill px-3 py-2 mb-2">২</span>
-                        <h5 class="fw-bold text-white">সার্ভে পূরণ করুন:</h5>
-                        <p class="small text-white mb-0">আপনার জন্য উপযোগী সার্ভেগুলো নির্বাচন করুন এবং সঠিক উত্তর দিন।</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="step-box text-start">
-                        <span class="badge bg-success rounded-pill px-3 py-2 mb-2">৩</span>
-                        <h5 class="fw-bold text-white">টাকা তুলে নিন (বিকাশ/নগদ):</h5>
-                        <p class="small text-white mb-0">নির্দিষ্ট পরিমাণ ব্যালেন্স অর্জন করলেই বিকাশ বা নগদে পেমেন্ট নিন।</p>
+                    <div class="list-group-item bg-dark text-white border-secondary mb-3 p-3 rounded">
+                        <h5 class="text-success fw-bold">BitLabs High Paying Opinion Poll</h5>
+                        <p class="small mb-2">Reward: ৳250 BDT (Estimated time: 15 mins)</p>
+                        <button class="btn btn-green btn-sm" onclick="alert('Survey starting...')">সার্ভে শুরু করুন</button>
                     </div>
                 </div>
             </div>
+        </div>
+    '''
+    return render_template_string(BASE_TEMPLATE, content=content)
 
-            <div class="cta-banner">
-                <h3 class="fw-bold mb-3 text-white">আজই শুরু করুন আপনার পেইড সার্ভে যাত্রা!</h3>
-                <p class="small text-white mb-4">কোনো অভিজ্ঞতা বা বিনিয়োগ ছাড়াই কাজ শুরু করা যায়।</p>
-                <a href="/signup" class="btn btn-light text-success fw-bold px-4 py-2 rounded-pill">এখনই ফ্রি অ্যাকাউন্ট তৈরি করুন</a>
+@app.route('/terms')
+def terms():
+    content = '''
+        <div class="container my-5">
+            <div class="main-card" style="max-width:800px;">
+                <h3 class="fw-bold text-success mb-3">Terms & Conditions</h3>
+                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ১০০ টাকা।</p>
+            </div>
+        </div>
+    '''
+    return render_template_string(BASE_TEMPLATE, content=content)
+
+@app.route('/about')
+def about():
+    content = '''
+        <div class="container my-5">
+            <div class="main-card" style="max-width:800px;">
+                <h3 class="fw-bold text-success mb-3">About Us</h3>
+                <p class="text-white small">TaskPayBD হলো বাংলাদেশের একটি বিশ্বস্ত পেইড সার্ভে প্ল্যাটফর্ম, যার মাধ্যমে ঘরে বসে সহজে আয় করা সম্ভব।</p>
+            </div>
+        </div>
+    '''
+    return render_template_string(BASE_TEMPLATE, content=content)
+
+@app.route('/contact')
+def contact():
+    content = '''
+        <div class="container my-5">
+            <div class="main-card" style="max-width:800px;">
+                <h3 class="fw-bold text-success mb-3">Contact Us</h3>
+                <p class="text-white small">যেকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
             </div>
         </div>
     '''
@@ -253,24 +279,14 @@ def signup():
         confirm_password = request.form['confirm_password']
         
         if password != confirm_password:
-            error = "পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড একই হতে হবে!"
-        elif len(password) < 6 or len(password) > 20:
-            error = "পাসওয়ার্ড অবশ্যই ৬ থেকে ২০ অক্ষরের মধ্যে হতে হবে!"
-        elif not re.search(r'[A-Z]', password):
-            error = "পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর (A-Z) থাকতে হবে!"
-        elif not re.search(r'[a-z]', password):
-            error = "পাসওয়ার্ডে কমপক্ষে একটি ছোট হাতের অক্ষর (a-z) থাকতে হবে!"
-        elif not re.search(r'[0-9]', password):
-            error = "পাসওয়ার্ডে কমপক্ষে একটি সংখ্যা (0-9) থাকতে হবে!"
-        elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-            error = "পাসওয়ার্ডে কমপক্ষে একটি স্পেশাল ক্যারেক্টার থাকতে হবে!"
+            error = "Password and confirm password must match!"
         else:
             try:
                 conn = sqlite3.connect('database.db')
                 cursor = conn.cursor()
                 cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
                 if cursor.fetchone():
-                    error = "এই ইমেইলটি ইতিমধ্যে রেজিস্টার্ড!"
+                    error = "Email already registered!"
                 else:
                     otp = str(random.randint(100000, 999999))
                     cursor.execute("INSERT OR REPLACE INTO temp_users (email, password, otp) VALUES (?, ?, ?)", (email, password, otp))
@@ -281,15 +297,14 @@ def signup():
                         session['pending_email'] = email
                         return redirect(url_for('verify_otp'))
                     else:
-                        error = "ওটিপি ইমেইল পাঠানো যায়নি। অ্যাপ পাসওয়ার্ড বা ইমেইল চেক করুন।"
+                        error = "Failed to send OTP email."
             except Exception as e:
-                error = f"ত্রুটি ঘটেছে: {e}"
+                error = f"Error: {e}"
 
     content = f'''
         <div class="container my-5">
             <div class="main-card">
-                <h3 class="fw-bold mb-2 text-center text-success">আপনার অ্যাকাউন্ট তৈরি করুন!</h3>
-                <p class="text-white text-center small mb-4">নিবন্ধন সম্পূর্ণ বিনামূল্যে।</p>
+                <h3 class="fw-bold mb-2 text-center text-success">রেজিস্ট্রেশন করুন</h3>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
@@ -302,36 +317,14 @@ def signup():
                         </span>
                     </div>
                     <div class="mb-3 input-group">
-                        <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="আপনার পাসওয়ার্ড নিশ্চিত করুন">
+                        <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="পাসওয়ার্ড নিশ্চিত করুন">
                         <span class="input-group-text" onclick="togglePassword('confPass', 'confIcon')">
                             <i class="fa-solid fa-eye" id="confIcon"></i>
                         </span>
                     </div>
-                    
-                    <div class="mb-3 text-white bg-dark p-3 rounded border border-secondary">
-                        <p class="fw-bold mb-1 text-success">পাসওয়ার্ড ফরম্যাট:</p>
-                        <ol class="mb-0 ps-3 small text-white">
-                            <li>এতে ৬ থেকে ২০টি অক্ষর থাকতে হবে।</li>
-                            <li>এতে কমপক্ষে একটি বড় অক্ষর থাকতে হবে।</li>
-                            <li>এতে কমপক্ষে একটি ছোট হাতের অক্ষর থাকতে হবে।</li>
-                            <li>এতে ০ থেকে ৯ এর মধ্যে একটি সংখ্যা থাকতে হবে।</li>
-                            <li>এতে কমপক্ষে একটি Special Characters থাকতে হবে।</li>
-                            <li>পাসওয়ার্ড এবং এর নিশ্চিতকরণ একই হতে হবে।</li>
-                        </ol>
-                    </div>
-
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="terms1" required>
-                        <label class="form-check-label small text-white" for="terms1">হ্যাঁ, আমি আপডেট, পরিষেবা এবং অফার সম্পর্কে যোগাযোগ পেতে সম্মত।</label>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="terms2" required>
-                        <label class="form-check-label small text-white" for="terms2">হ্যাঁ, আমি পড়েছি এবং বুঝতে পেরেছি গোপনীয়তা নীতি, সদস্যপদ শর্তাবলী, পুরস্কার সিস্টেমের নিয়ম ও শর্তাবলী।</label>
-                    </div>
-
                     <button type="submit" class="btn btn-green w-100 py-2">ওটিপি পাঠান</button>
                 </form>
-                <p class="text-center mt-3 small text-white">ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="/login" class="text-success fw-bold">লগ ইন করুন</a></p>
+                <p class="text-center mt-3 small text-white">Already have an account? <a href="/login" class="text-success fw-bold">লগ ইন করুন</a></p>
             </div>
         </div>
     '''
@@ -362,14 +355,14 @@ def verify_otp():
             session['user'] = email
             return redirect(url_for('dashboard'))
         else:
-            error = "ভুল ওটিপি কোড! আবার চেষ্টা করুন।"
+            error = "Invalid OTP code!"
         conn.close()
 
     content = f'''
         <div class="container my-5">
             <div class="main-card">
                 <h3 class="fw-bold mb-2 text-center text-success">ইমেইল ভেরিফিকেশন</h3>
-                <p class="text-center small text-white">আপনার ইমেইলে পাঠানো ৬ ডিজিটের ওটিপি কোডটি লিখুন।</p>
+                <p class="text-center small text-white">Enter the 6-digit OTP sent to your email.</p>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
@@ -399,7 +392,7 @@ def login():
             session['user'] = email
             return redirect(url_for('dashboard'))
         else:
-            error = "ভুল ইমেইল বা পাসওয়ার্ড!"
+            error = "Invalid email or password!"
 
     content = f'''
         <div class="container my-5">
@@ -416,54 +409,9 @@ def login():
                             <i class="fa-solid fa-eye" id="loginIcon"></i>
                         </span>
                     </div>
-                    <div class="mb-3 text-end">
-                        <a href="/forgot-password" class="small text-success text-decoration-none">পাসওয়ার্ড ভুলে গেছেন?</a>
-                    </div>
                     <button type="submit" class="btn btn-green w-100 py-2">লগ ইন</button>
                 </form>
-                <p class="text-center mt-3 small text-white">অ্যাকাউন্ট নেই? <a href="/signup" class="text-success fw-bold">রেজিস্ট্রেশন করুন</a></p>
-            </div>
-        </div>
-    '''
-    return render_template_string(BASE_TEMPLATE, content=content)
-
-@app.route('/forgot-password', methods=['GET', 'POST'])
-def forgot_password():
-    message = ""
-    error = ""
-    
-    if request.method == 'POST':
-        email = request.form['email']
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
-        row = cursor.fetchone()
-        
-        if row:
-            masked_email_str = mask_email(email)
-            message = f"আপনার একাউন্ট খুঁজে পাওয়া গেছে! ইমেইল ফরম্যাট: {masked_email_str}"
-        else:
-            error = "এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট রেজিস্টার্ড নেই!"
-        conn.close()
-
-    content = f'''
-        <div class="container my-5">
-            <div class="main-card">
-                <h3 class="fw-bold mb-3 text-center text-success">পাসওয়ার্ড রিকভারি</h3>
-                {f'<div class="alert alert-success py-2 small">{message}</div>' if message else ''}
-                {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
-                
-                <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label small text-white">আপনার রেজিস্টার্ড ইমেইল দিন</label>
-                        <input type="email" class="form-control" name="email" required placeholder="name@example.com">
-                    </div>
-                    <button type="submit" class="btn btn-green w-100 py-2">ইমেইল যাচাই করুন</button>
-                </form>
-                
-                <div class="text-center mt-3">
-                    <a href="/login" class="small text-success text-decoration-none">লগ ইন পেজে ফিরে যান</a>
-                </div>
+                <p class="text-center mt-3 small text-white">Don't have an account? <a href="/signup" class="text-success fw-bold">রেজিস্ট্রেশন করুন</a></p>
             </div>
         </div>
     '''
@@ -482,25 +430,25 @@ def dashboard():
         method = request.form['method']
         number = request.form['number']
         try:
-            amount = float(request.form['amount'])
+            amount_bdt = float(request.form['amount'])
         except:
-            amount = 0.0
+            amount_bdt = 0.0
 
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         cursor.execute("SELECT balance FROM users WHERE email = ?", (user_email,))
         row = cursor.fetchone()
-        current_balance = row[0] if row else 0.0
+        current_balance_bdt = row[0] if row else 0.0
 
-        if amount < 5.0:
-            error = "ন্যূনতম উইথড্র পরিমাণ ৫.০০ USD!"
-        elif amount > current_balance:
+        if amount_bdt < 100.0:
+            error = "ন্যূনতম উইথড্র পরিমাণ ১০০.০০ BDT!"
+        elif amount_bdt > current_balance_bdt:
             error = "পর্যাপ্ত ব্যালেন্স নেই!"
         else:
-            new_balance = current_balance - amount
+            new_balance = current_balance_bdt - amount_bdt
             cursor.execute("UPDATE users SET balance = ? WHERE email = ?", (new_balance, user_email))
             cursor.execute("INSERT INTO withdraws (email, method, number, amount, status) VALUES (?, ?, ?, ?, ?)",
-                           (user_email, method, number, amount, 'Pending'))
+                           (user_email, method, number, amount_bdt, 'Pending'))
             conn.commit()
             message = "উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!"
         conn.close()
@@ -513,7 +461,7 @@ def dashboard():
     withdraw_history = cursor.fetchall()
     conn.close()
     
-    balance = row[0] if row else 0.00
+    balance_bdt = row[0] if row else 0.00
     
     history_html = ""
     for w in withdraw_history:
@@ -521,7 +469,7 @@ def dashboard():
             <tr>
                 <td>{w[0]}</td>
                 <td>{w[1]}</td>
-                <td>${w[2]:.2f}</td>
+                <td>৳{w[2]:.2f}</td>
                 <td><span class="badge bg-warning text-dark">{w[3]}</span></td>
             </tr>
         '''
@@ -539,7 +487,7 @@ def dashboard():
                 <div class="col-md-4 mb-3">
                     <div class="main-card text-center" style="max-width:100%;">
                         <h6 class="text-white">অ্যাকাউন্ট ব্যালেন্স</h6>
-                        <h2 class="fw-bold text-success mb-3">${balance:.2f} USD</h2>
+                        <h2 class="fw-bold text-success mb-3">৳{balance_bdt:.2f} BDT</h2>
                         <hr class="border-secondary">
                         <h5 class="text-white fw-bold mb-3">টাকা তুলুন (বিকাশ/নগদ)</h5>
                         {f'<div class="alert alert-success py-2 small">{message}</div>' if message else ''}
@@ -557,8 +505,8 @@ def dashboard():
                                 <input type="text" class="form-control" name="number" required placeholder="01XXXXXXXXX">
                             </div>
                             <div class="mb-3 text-start">
-                                <label class="form-label small text-white">পরিমাণ (USD)</label>
-                                <input type="number" step="0.01" class="form-control" name="amount" required placeholder="5.00">
+                                <label class="form-label small text-white">পরিমাণ (BDT)</label>
+                                <input type="number" step="1.00" class="form-control" name="amount" required placeholder="100">
                             </div>
                             <button type="submit" class="btn btn-green w-100 py-2">উইথড্র রিকোয়েস্ট পাঠান</button>
                         </form>
@@ -567,13 +515,21 @@ def dashboard():
 
                 <div class="col-md-8">
                     <div class="main-card mb-4" style="max-width:100%;">
-                        <h5 class="fw-bold text-white">অফারওয়াল (CPX Research & BitLabs)</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold text-white mb-0">উপলব্ধ সার্ভে (Available Surveys)</h5>
+                            <a href="/surveys" class="btn btn-outline-success btn-sm">সব সার্ভে দেখুন (All Surveys)</a>
+                        </div>
                         <hr class="border-secondary">
-                        <p class="text-white small">নিচের অফারওয়াল থেকে সার্ভে সম্পূর্ণ করে আপনার একাউন্টে ইনস্ট্যান্ট ডলার যোগ করতে পারবেন।</p>
+                        <div class="p-3 bg-dark rounded border border-success mb-3 text-start">
+                            <span class="badge bg-success mb-1">Top Best Survey</span>
+                            <h6 class="text-white fw-bold">CPX Research Special Survey</h6>
+                            <p class="small text-muted mb-2">Reward: ৳150 BDT | Time: 8 mins</p>
+                            <a href="/surveys" class="btn btn-green btn-sm px-4">সার্ভে শুরু করুন</a>
+                        </div>
                         <div class="p-4 bg-dark rounded border border-secondary text-center">
                             <h6 class="text-success fw-bold mb-2">CPX Research & BitLabs Survey Wall</h6>
-                            <p class="small text-white mb-3">সার্ভে লোড করার জন্য আপনার অফারওয়াল আইফ্রেম এখানে যুক্ত করা হবে।</p>
-                            <button class="btn btn-green btn-sm px-4">সার্ভে শুরু করুন</button>
+                            <p class="small text-white mb-3">এখানে অফারওয়ালের সার্ভে লোড হবে।</p>
+                            <a href="/surveys" class="btn btn-green btn-sm px-4">অফারওয়াল সার্ভে দেখুন</a>
                         </div>
                     </div>
 
