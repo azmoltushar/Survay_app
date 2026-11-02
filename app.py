@@ -569,7 +569,7 @@ def dashboard():
                                 <input type="text" class="form-control" name="number" required placeholder="01XXXXXXXXX">
                             </div>
                             <div class="mb-3 text-start">
-                                <label class="form-label smalltext-white">পরিমাণ (BDT)</label>
+                                <label class="form-label small text-white">পরিমাণ (BDT)</label>
                                 <input type="number" step="1.00" class="form-control" name="amount" required placeholder="100">
                             </div>
                             <button type="submit" class="btn btn-green w-100 py-2">উইথড্র রিকোয়েস্ট পাঠান</button>
