@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="main-card" style="max-width:100%;">
+                <h4 class="text-white">ড্যাশবোর্ড ওভারভিউ</h4>
+                <p class="text-white mb-0">স্বাগতম, <strong>{{ user_email }}</strong></p>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="main-card text-center" style="max-width:100%;">
+                <h6 class="text-white">অ্যাকাউন্ট ব্যালেন্স</h6>
+                <h2 class="fw-bold text-success mb-3">৳{{ "%.2f"|format(balance_bdt) }} BDT</h2>
+                <hr class="border-secondary">
+                <h5 class="text-white fw-bold mb-3">টাকা তুলুন (বিকাশ/নগদ)</h5>
+                {% if message %}
+                    <div class="alert alert-success py-2 small">{{ message }}</div>
+                {% endif %}
+                {% if error %}
+                    <div class="alert alert-danger py-2 small">{{ error }}</div>
+                {% endif %}
+                <form method="POST">
+                    <div class="mb-3 text-start">
+                        <label class="form-label small text-white">পেমেন্ট মেথড</label>
+                        <select class="form-select" name="method" required>
+                            <option value="Bkash">বিকাশ (Bkash)</option>
+                            <option value="Nagad">নগদ (Nagad)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label class="form-label small text-white">একাউন্ট নম্বর</label>
+                        <input type="text" class="form-control" name="number" required placeholder="01XXXXXXXXX">
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label class="form-label small text-white">পরিমাণ (BDT - ন্যূনতম ১০০ টাকা)</label>
+                        <input type="number" step="1.00" class="form-control" name="amount" required placeholder="100">
+                    </div>
+                    <button type="submit" class="btn btn-green w-100 py-2">উইথড্র রিকোয়েস্ট পাঠান</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="main-card mb-4" style="max-width:100%;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-white mb-0">উপলব্ধ সার্ভে (Available Surveys)</h5>
+                    <a href="/surveys" class="btn btn-outline-success btn-sm">সব সার্ভে দেখুন</a>
+                </div>
+                <hr class="border-secondary">
+                <div class="p-3 bg-dark rounded border border-success mb-3 text-start">
+                    <span class="badge bg-success mb-1">Top Best Survey</span>
+                    <h6 class="text-white fw-bold">CPX Research Special Survey</h6>
+                    <p class="small text-muted mb-2">Reward: ৳150 BDT | Time: 8 mins</p>
+                    <a href="/surveys" class="btn btn-green btn-sm px-4">সার্ভে শুরু করুন</a>
+                </div>
+                <div class="p-4 bg-dark rounded border border-secondary text-center">
+                    <h6 class="text-success fw-bold mb-2">CPX Research & BitLabs Survey Wall</h6>
+                    <p class="small text-white mb-3">এখানে অফারওয়ালের সার্ভে লোড হবে।</p>
+                    <a href="/surveys" class="btn btn-green btn-sm px-4">অফারওয়াল সার্ভে দেখুন</a>
+                </div>
+            </div>
+
+            <div class="main-card" style="max-width:100%;">
+                <h5 class="fw-bold text-white mb-3">উইথড্র হিস্ট্রি</h5>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-bordered small text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th>মেথড</th>
+                                <th>নম্বর</th>
+                                <th>পরিমাণ</th>
+                                <th>স্ট্যাটাস</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if withdraw_history %}
+                                {% for w in withdraw_history %}
+                                <tr>
+                                    <td>{{ w[0] }}</td>
+                                    <td>{{ w[1] }}</td>
+                                    <td>৳{{ "%.2f"|format(w[2]) }}</td>
+                                    <td><span class="badge bg-warning text-dark">{{ w[3] }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="4" class="text-muted">কোনো উইথড্র রেকর্ড নেই।</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
