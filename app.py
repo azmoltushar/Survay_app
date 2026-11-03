@@ -335,26 +335,34 @@ def signup():
     content = f'''
         <div class="container my-5">
             <div class="main-card">
-                <h3 class="fw-bold mb-2 text-center text-success">রেজিস্ট্রেশন করুন</h3>
+                <h3 class="fw-bold mb-3 text-center text-success">রেজিস্ট্রেশন করুন</h3>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" name="username" required placeholder="ইউজারনেম (Username)">
+                    <div class="mb-3 text-start">
+                        <label class="form-label text-white small fw-bold">ইউজারনেম (Username)</label>
+                        <input type="text" class="form-control" name="username" required placeholder="আপনার নাম লিখুন">
                     </div>
-                    <div class="mb-3">
-                        <input type="email" class="form-control" name="email" required placeholder="ই-মেইল">
+                    <div class="mb-3 text-start">
+                        <label class="form-label text-white small fw-bold">ই-মেইল (Email)</label>
+                        <input type="email" class="form-control" name="email" required placeholder="example@gmail.com">
                     </div>
-                    <div class="mb-3 input-group">
-                        <input type="password" class="form-control" name="password" id="regPass" required placeholder="পাসওয়ার্ড">
-                        <span class="input-group-text" onclick="togglePassword('regPass', 'regIcon')">
-                            <i class="fa-solid fa-eye" id="regIcon"></i>
-                        </span>
+                    <div class="mb-3 text-start">
+                        <label class="form-label text-white small fw-bold">পাসওয়ার্ড (Password)</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="regPass" required placeholder="••••••••">
+                            <span class="input-group-text" onclick="togglePassword('regPass', 'regIcon')">
+                                <i class="fa-solid fa-eye" id="regIcon"></i>
+                            </span>
+                        </div>
                     </div>
-                    <div class="mb-3 input-group">
-                        <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="পাসওয়ার্ড নিশ্চিত করুন">
-                        <span class="input-group-text" onclick="togglePassword('confPass', 'confIcon')">
-                            <i class="fa-solid fa-eye" id="confIcon"></i>
-                        </span>
+                    <div class="mb-3 text-start">
+                        <label class="form-label text-white small fw-bold">পাসওয়ার্ড নিশ্চিত করুন (Confirm Password)</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="••••••••">
+                            <span class="input-group-text" onclick="togglePassword('confPass', 'confIcon')">
+                                <i class="fa-solid fa-eye" id="confIcon"></i>
+                            </span>
+                        </div>
                     </div>
                     <div class="mb-3 form-check text-start">
                         <input type="checkbox" class="form-check-input" id="terms" required>
@@ -449,14 +457,18 @@ def login():
                 <h3 class="fw-bold mb-3 text-center text-success">লগ ইন করুন</h3>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
-                    <div class="mb-3">
+                    <div class="mb-3 text-start">
+                        <label class="form-label text-white small fw-bold">ই-মেইল (Email)</label>
                         <input type="email" class="form-control" name="email" required placeholder="name@example.com">
                     </div>
-                    <div class="mb-3 input-group">
-                        <input type="password" class="form-control" name="password" id="loginPass" required placeholder="••••••••">
-                        <span class="input-group-text" onclick="togglePassword('loginPass', 'loginIcon')">
-                            <i class="fa-solid fa-eye" id="loginIcon"></i>
-                        </span>
+                    <div class="mb-3 text-start">
+                        <label class="form-label text-white small fw-bold">পাসওয়ার্ড (Password)</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="loginPass" required placeholder="••••••••">
+                            <span class="input-group-text" onclick="togglePassword('loginPass', 'loginIcon')">
+                                <i class="fa-solid fa-eye" id="loginIcon"></i>
+                            </span>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-green w-100 py-2">লগ ইন</button>
                 </form>
