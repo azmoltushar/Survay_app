@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from flask import Flask, render_template_string, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = "taskpaybd_secure_secret_key"
+app.secret_key = "surveyzonebd_secure_secret_key"
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
@@ -20,6 +20,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
             balance REAL DEFAULT 0.00
@@ -28,6 +29,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS temp_users (
             email TEXT PRIMARY KEY,
+            username TEXT NOT NULL,
             password TEXT NOT NULL,
             otp TEXT NOT NULL
         )
@@ -52,8 +54,8 @@ def send_otp_email(receiver_email, otp_code):
         msg = MIMEMultipart()
         msg['From'] = SENDER_EMAIL
         msg['To'] = receiver_email
-        msg['Subject'] = "TaskPayBD - Email Verification OTP"
-        body = f"Apanar TaskPayBD account registration-er jonno OTP code holo: {otp_code}"
+        msg['Subject'] = "SurveyZoneBD - Email Verification OTP"
+        body = f"Apanar SurveyZoneBD account registration-er jonno OTP code holo: {otp_code}"
         msg.attach(MIMEText(body, 'plain'))
         
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=5)
@@ -63,7 +65,7 @@ def send_otp_email(receiver_email, otp_code):
         server.quit()
         return True
     except Exception as e:
-        print(f"SMTP Error (Render Network Block): {e}")
+        print(f"SMTP Error: {e}")
         print(f"TESTING OTP FOR {receiver_email}: {otp_code}")
         return True
 
@@ -73,7 +75,7 @@ BASE_TEMPLATE = '''
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskPayBD - Paid Survey Platform</title>
+    <title>SurveyZoneBD - Paid Survey Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -98,7 +100,7 @@ BASE_TEMPLATE = '''
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="brand-logo" href="/">TaskPayBD</a>
+            <a class="brand-logo" href="/">SurveyZoneBD</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -131,8 +133,8 @@ BASE_TEMPLATE = '''
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-white">TaskPayBD</h5>
-                    <p class="small text-white">TaskPayBD - Bangladeshi trusted paid survey platform.</p>
+                    <h5 class="fw-bold text-white">SurveyZoneBD</h5>
+                    <p class="small text-white">SurveyZoneBD - Bangladeshi trusted paid survey platform.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <h6 class="fw-bold text-white">দ্রুত লিঙ্ক</h6>
@@ -149,7 +151,7 @@ BASE_TEMPLATE = '''
             </div>
             <hr class="border-secondary">
             <div class="text-center small pb-3 text-white">
-                &copy; 2026 TaskPayBD. All rights reserved.
+                &copy; 2026 SurveyZoneBD. All rights reserved.
             </div>
         </div>
     </footer>
@@ -181,8 +183,8 @@ def home():
     content = '''
         <div class="hero-section">
             <div class="container">
-                <h1 class="display-5 fw-bold mb-3 text-white">পেইড সার্ভে করে আয় করুন</h1>
-                <p class="text-light mb-4">TaskPayBD প্ল্যাটফর্মে আপনাকে স্বাগতম। অনলাইন সার্ভে করে প্রতিদিন সহজে ইনকাম করুন।</p>
+                <h1 class="display-5 fw-bold mb-3 text-white">পেইড সার্ভে করে আয় করুন</h1>
+                <p class="text-light mb-4">SurveyZoneBD প্ল্যাটফর্মে আপনাকে স্বাগতম। অনলাইন সার্ভে করে প্রতিদিন সহজে ইনকাম করুন।</p>
                 <div class="row g-4 mt-2 justify-content-center">
                     <div class="col-md-4">
                         <div class="feature-card text-start">
@@ -199,7 +201,7 @@ def home():
                     <div class="col-md-4">
                         <div class="feature-card text-start">
                             <h5 class="fw-bold text-success mb-2">👤 ১০০% ফ্রি রেজিস্ট্রেশন</h5>
-                            <p class="small text-white mb-0">কোনো খরচ ছাড়াই আজই আপনার অ্যাকাউন্ট তৈরি করুন।</p>
+                            <p class="small text-white mb-0">কোনো খরচ ছাড়াই আজই আপনার অ্যাকাউন্ট তৈরি করুন।</p>
                         </div>
                     </div>
                 </div>
@@ -213,7 +215,7 @@ def home():
                 <div class="col-md-4">
                     <div class="step-box">
                         <h5 class="text-success fw-bold mb-2">১. ফ্রি রেজিস্ট্রেশন</h5>
-                        <p class="small text-white mb-0">ইমেইল ও পাসওয়ার্ড দিয়ে খুব সহজেই আপনার ফ্রি একাউন্ট তৈরি করে নিন।</p>
+                        <p class="small text-white mb-0">ইউজারনেম, ইমেইল ও পাসওয়ার্ড দিয়ে খুব সহজেই আপনার ফ্রি একাউন্ট তৈরি করুন।</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -232,7 +234,7 @@ def home():
 
             <div class="cta-banner">
                 <h3 class="fw-bold mb-2 text-white">আজই শুরু করুন আপনার পেইড সার্ভে যাত্রা!</h3>
-                <p class="small text-light mb-3">কোনো অভিজ্ঞতা বা বিনিয়োগ ছাড়াই কাজ শুরু করা যায়।</p>
+                <p class="small text-light mb-3">কোনো অভিজ্ঞতা বা বিনিয়োগ ছাড়াই কাজ শুরু করা যায়।</p>
                 <a href="/signup" class="btn btn-light text-success fw-bold px-4 py-2 rounded-pill">এখনই ফ্রি অ্যাকাউন্ট তৈরি করুন</a>
             </div>
         </div>
@@ -269,7 +271,7 @@ def terms():
         <div class="container my-5" style="max-width: 800px;">
             <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">Terms & Conditions</h3>
-                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে।<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে।<br>৩. ন্যূনতম উইথড্র ১০০ টাকা।</p>
+                <p class="text-white small">১. প্রতি অ্যাকাউন্টে সঠিক তথ্য দিয়ে কাজ করতে হবে。<br>২. ভুয়া তথ্য দিলে অ্যাকাউন্ট ব্যান হতে পারে。<br>৩. ন্যূনতম উইথড্র ১০০ টাকা।</p>
             </div>
         </div>
     '''
@@ -281,7 +283,7 @@ def about():
         <div class="container my-5" style="max-width: 800px;">
             <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">About Us</h3>
-                <p class="text-white small">TaskPayBD হলো বাংলাদেশের একটি বিশ্বস্ত পেইড সার্ভে প্ল্যাটফর্ম, যার মাধ্যমে ঘরে বসে সহজে আয় করা সম্ভব।</p>
+                <p class="text-white small">SurveyZoneBD হলো বাংলাদেশের একটি বিশ্বস্ত পেইড সার্ভে প্ল্যাটফর্ম, যার মাধ্যমে ঘরে বসে সহজে আয় করা সম্ভব।</p>
             </div>
         </div>
     '''
@@ -293,7 +295,7 @@ def contact():
         <div class="container my-5" style="max-width: 800px;">
             <div class="main-card" style="max-width: 100%;">
                 <h3 class="fw-bold text-success mb-3">Contact Us</h3>
-                <p class="text-white small">যেকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
+                <p class="text-white small">যেকোনো প্রয়োজনে আমাদের ইমেইল করুন: arefinhossain345@gmail.com</p>
             </div>
         </div>
     '''
@@ -303,6 +305,7 @@ def contact():
 def signup():
     error = ""
     if request.method == 'POST':
+        username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
@@ -318,7 +321,7 @@ def signup():
                     error = "Email already registered!"
                 else:
                     otp = str(random.randint(100000, 999999))
-                    cursor.execute("INSERT OR REPLACE INTO temp_users (email, password, otp) VALUES (?, ?, ?)", (email, password, otp))
+                    cursor.execute("INSERT OR REPLACE INTO temp_users (email, username, password, otp) VALUES (?, ?, ?, ?)", (email, username, password, otp))
                     conn.commit()
                     conn.close()
                     if send_otp_email(email, otp):
@@ -336,16 +339,19 @@ def signup():
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
+                        <input type="text" class="form-control" name="username" required placeholder="ইউজারনেম (Username)">
+                    </div>
+                    <div class="mb-3">
                         <input type="email" class="form-control" name="email" required placeholder="ই-মেইল">
                     </div>
                     <div class="mb-3 input-group">
-                        <input type="password" class="form-control" name="password" id="regPass" required placeholder="পাসওয়ার্ড">
+                        <input type="password" class="form-control" name="password" id="regPass" required placeholder="পাসওয়ার্ড">
                         <span class="input-group-text" onclick="togglePassword('regPass', 'regIcon')">
                             <i class="fa-solid fa-eye" id="regIcon"></i>
                         </span>
                     </div>
                     <div class="mb-3 input-group">
-                        <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="পাসওয়ার্ড নিশ্চিত করুন">
+                        <input type="password" class="form-control" name="confirm_password" id="confPass" required placeholder="পাসওয়ার্ড নিশ্চিত করুন">
                         <span class="input-group-text" onclick="togglePassword('confPass', 'confIcon')">
                             <i class="fa-solid fa-eye" id="confIcon"></i>
                         </span>
@@ -353,7 +359,7 @@ def signup():
                     <div class="mb-3 form-check text-start">
                         <input type="checkbox" class="form-check-input" id="terms" required>
                         <label class="form-check-label small text-white" for="terms">
-                            আমি <a href="/terms" target="_blank" class="text-success">Terms & Conditions</a> পড়েছি এবং সম্মত আছি।
+                            আমি <a href="/terms" target="_blank" class="text-success">Terms & Conditions</a> পড়েছি এবং সম্মত আছি।
                         </label>
                     </div>
                     <button type="submit" class="btn btn-green w-100 py-2">রেজিস্ট্রেশন করুন</button>
@@ -371,7 +377,6 @@ def verify_otp():
     if not email:
         return redirect(url_for('signup'))
 
-    # Gmail mask: prothom 2 ti ebong shesh 2 ti letter dekhabe, majkhane #### thakbe
     if '@' in email:
         name_part, domain_part = email.split('@', 1)
         if len(name_part) > 4:
@@ -385,12 +390,13 @@ def verify_otp():
         user_otp = request.form['otp']
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
-        cursor.execute("SELECT password, otp FROM temp_users WHERE email = ?", (email,))
+        cursor.execute("SELECT username, password, otp FROM temp_users WHERE email = ?", (email,))
         row = cursor.fetchone()
         
-        if row and row[1] == user_otp:
-            password = row[0]
-            cursor.execute("INSERT INTO users (email, password, balance) VALUES (?, ?, ?)", (email, password, 0.00))
+        if row and row[2] == user_otp:
+            username = row[0]
+            password = row[1]
+            cursor.execute("INSERT INTO users (username, email, password, balance) VALUES (?, ?, ?, ?)", (username, email, password, 0.00))
             cursor.execute("DELETE FROM temp_users WHERE email = ?", (email,))
             conn.commit()
             conn.close()
@@ -406,7 +412,7 @@ def verify_otp():
             <div class="main-card text-center">
                 <h3 class="fw-bold mb-2 text-success">ইমেইল ভেরিফিকেশন</h3>
                 <p class="small text-white mb-1"><strong>{masked_email}</strong> gmail a patha no hoiyeche</p>
-                <p class="small text-success mb-3">একটি ভেরিফিকেশন কোড পাঠানো হয়েছে</p>
+                <p class="small text-success mb-3">একটি ভেরিফিকেশন কোড পাঠানো হয়েছে</p>
                 {f'<div class="alert alert-danger py-2 small">{error}</div>' if error else ''}
                 <form method="POST">
                     <div class="mb-3">
@@ -493,18 +499,19 @@ def dashboard():
             cursor.execute("INSERT INTO withdraws (email, method, number, amount, status) VALUES (?, ?, ?, ?, ?)",
                            (user_email, method, number, amount_bdt, 'Pending'))
             conn.commit()
-            message = "উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!"
+            message = "উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!"
         conn.close()
 
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT balance FROM users WHERE email = ?", (user_email,))
-    row = cursor.fetchone()
+    cursor.execute("SELECT username, balance FROM users WHERE email = ?", (user_email,))
+    user_row = cursor.fetchone()
     cursor.execute("SELECT method, number, amount, status FROM withdraws WHERE email = ? ORDER BY id DESC", (user_email,))
     withdraw_history = cursor.fetchall()
     conn.close()
     
-    balance_bdt = row[0] if row else 0.00
+    username = user_row[0] if user_row else "User"
+    balance_bdt = user_row[1] if user_row else 0.00
     
     history_html = ""
     for w in withdraw_history:
@@ -523,7 +530,7 @@ def dashboard():
                 <div class="col-md-12 mb-4">
                     <div class="main-card" style="max-width:100%;">
                         <h4 class="text-white">ড্যাশবোর্ড ওভারভিউ</h4>
-                        <p class="text-white mb-0">স্বাগতম, <strong>{user_email}</strong></p>
+                        <p class="text-white mb-0">স্বাগতম, <strong>{username}</strong></p>
                     </div>
                 </div>
 
